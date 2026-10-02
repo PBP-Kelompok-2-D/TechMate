@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/style.css">
+    {% block meta %}{% endblock meta %}
+</head>
+<body>
+    <header class="navbar">
+        <a href="{% url 'main:show_main' %}" class="nav-brand">
+            <img src="/static/img/logo.svg" alt="TechMate Logo">
+        </a>
+        <nav class="nav-menu">
+            <a href="{% url 'main:show_main' %}" class="nav-link">Home</a>
+            <a href="#discover" class="nav-link">Gadget</a>
+            <a href="#troubleshoot" class="nav-link">Troubles</a>
+            <a href="#forum" class="nav-link">Forum</a>
+            <a href="#marketplace" class="nav-link">Shop</a>
+
+            {% if user.is_authenticated %}
+                <span class="nav-user">{{ user.username }}</span>
+                <a href="{% url 'main:logout' %}" class="nav-btn-logout">Logout</a>
+            {% else %}
+                <span class="nav-user">Guest</span>
+                <a href="{% url 'main:login' %}" class="nav-btn-login">Login</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    {% block content %}
+    {% endblock content %}
+
+    <footer class="site-footer">
+        <p>&copy; 2026 {{ name }}. Sustainable Living through E-Waste Prevention.</p>
+    </footer>
+</body>
+</html>

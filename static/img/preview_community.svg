@@ -1,0 +1,31 @@
+<svg width="400" height="200" viewBox="0 0 400 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_25_211)">
+<path d="M400 0H0V200H400V0Z" fill="#09141D"/>
+<path d="M400 0H0V200H400V0Z" fill="url(#paint0_radial_25_211)"/>
+<path d="M80 64C82.2091 64 84 62.2091 84 60C84 57.7909 82.2091 56 80 56C77.7909 56 76 57.7909 76 60C76 62.2091 77.7909 64 80 64Z" fill="#38BDF8" fill-opacity="0.5"/>
+<path d="M320 53C321.657 53 323 51.6569 323 50C323 48.3431 321.657 47 320 47C318.343 47 317 48.3431 317 50C317 51.6569 318.343 53 320 53Z" fill="#6366F1" fill-opacity="0.5"/>
+<path d="M330 144C332.209 144 334 142.209 334 140C334 137.791 332.209 136 330 136C327.791 136 326 137.791 326 140C326 142.209 327.791 144 330 144Z" fill="#00E5FF" fill-opacity="0.4"/>
+<path d="M80 60L135 85" stroke="#38BDF8" stroke-opacity="0.2" stroke-dasharray="4 4"/>
+<path d="M265 85L320 50" stroke="#6366F1" stroke-opacity="0.2" stroke-dasharray="4 4"/>
+<path d="M261 42H139C131.268 42 125 48.268 125 56V103C125 110.732 131.268 117 139 117H261C268.732 117 275 110.732 275 103V56C275 48.268 268.732 42 261 42Z" fill="#132330" stroke="#38BDF8" stroke-opacity="0.5" stroke-width="1.5"/>
+<path d="M145 117H165L140 132L145 117Z" fill="#132330"/>
+<path d="M145 117L140 132L165 117" stroke="#38BDF8" stroke-opacity="0.5" stroke-width="1.5"/>
+<path d="M152 65L155 73H163L157 78L159 86L152 81L145 86L147 78L141 73H149L152 65Z" fill="#F59E0B"/>
+<path d="M172 71H250" stroke="white" stroke-opacity="0.8" stroke-width="3" stroke-linecap="round"/>
+<path d="M172 82H225" stroke="#94A3B8" stroke-opacity="0.6" stroke-width="3" stroke-linecap="round"/>
+<path d="M264 105H201C189.402 105 180 114.402 180 126C180 137.598 189.402 147 201 147H264C275.598 147 285 137.598 285 126C285 114.402 275.598 105 264 105Z" fill="#0B1924" stroke="#6366F1" stroke-width="1.4"/>
+<path d="M202 130C204.209 130 206 128.209 206 126C206 123.791 204.209 122 202 122C199.791 122 198 123.791 198 126C198 128.209 199.791 130 202 130Z" fill="#00E5FF"/>
+<path d="M217 130C219.209 130 221 128.209 221 126C221 123.791 219.209 122 217 122C214.791 122 213 123.791 213 126C213 128.209 214.791 130 217 130Z" fill="#38BDF8"/>
+<path d="M232 130C234.209 130 236 128.209 236 126C236 123.791 234.209 122 232 122C229.791 122 228 123.791 228 126C228 128.209 229.791 130 232 130Z" fill="#6366F1"/>
+<path d="M252 122L262 126L252 130V122Z" fill="#38BDF8"/>
+</g>
+<defs>
+<radialGradient id="paint0_radial_25_211" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(200 100) scale(140 90)">
+<stop stop-color="#6366F1" stop-opacity="0.3"/>
+<stop offset="1" stop-color="#06131A" stop-opacity="0"/>
+</radialGradient>
+<clipPath id="clip0_25_211">
+<rect width="400" height="200" fill="white"/>
+</clipPath>
+</defs>
+</svg>

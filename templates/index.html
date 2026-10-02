@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block meta %}
+<title>Home - {{ name }}</title>
+{% endblock meta %}
+
+{% block content %}
+    <main>
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title">{{ welcoming }}</h1>
+                <p class="hero-description">{{ description }}</p>
+            </div>
+            <div class="hero-image-wrapper">
+                <img src="/static/img/vector_gadget.svg" alt="Tech Illustration" class="hero-image">
+            </div>
+        </section>
+
+        <section class="feature-cards">
+            <a href="#" class="card">
+                <div class="card-preview">
+                    <img src="/static/img/preview_discover.svg" alt="Gadget">
+                </div>
+                <div class="card-body">
+                    <h2 class="card-title">Discover</h2>
+                    <p class="card-text">Cari perangkat yang Anda ingin</p>
+                </div>
+            </a>
+
+            <a href="#" class="card">
+                <div class="card-preview">
+                    <img src="/static/img/preview_community.svg" alt="Community">
+                </div>
+                <div class="card-body">
+                    <h2 class="card-title">Community</h2>
+                    <p class="card-text">Bagikan ulasan dan tanya jawab seputar gadget</p>
+                </div>
+            </a>
+            
+            <a href="#" class="card">
+                <div class="card-preview">
+                    <img src="/static/img/preview_shop.svg" alt="Shop">
+                </div>
+                <div class="card-body">
+                    <h2 class="card-title">Shop & Sell</h2>
+                    <p class="card-text">Jual dan beli perangkat seken terpercaya</p>
+                </div>
+            </a>
+        </section>
+    </main>
+{% endblock content %}
