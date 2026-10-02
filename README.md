@@ -2,6 +2,7 @@
 
 Sebuah platform web berbasis komunitas untuk mendukung gaya hidup berkelanjutan (*Sustainable Living*) melalui pencegahan limbah elektronik (*E-Waste Prevention*). Platform ini membantu mahasiswa dan masyarakat cerdas dalam memilih, merawat, dan memperpanjang masa pakai gadget (HP, Laptop, Tablet) melalui filter kebutuhan tepat sasaran, direktori perbaikan mandiri, forum komunitas, dan jual-beli gadget seken.
 
+> [Figma](https://www.figma.com/design/caLUNONMKw3LSA9SsnYega/TechMate?node-id=0-1&t=SADg5riyhZINLyCG-1) & [Website TechMate](https://vebian-francois-techmate.pws.cs.ui.ac.id/)
 ---
 
 ## 1. Latar Belakang & Deskripsi Masalah 🔍
