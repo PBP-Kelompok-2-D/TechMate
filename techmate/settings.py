@@ -44,6 +44,10 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "main",
+    "explorer",
+    "marketplace",
+    "community",
+    "troubleshooting",
 ]
 
 MIDDLEWARE = [

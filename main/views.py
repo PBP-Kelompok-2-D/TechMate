@@ -50,4 +50,4 @@ def show_main(request):
         'welcoming':"Find your need in tech",
         'description': "Temukan perangkat yang pas dengan kebutuhan dan kantong Anda. Bagikan ulasan nyata di komunitas penggemar teknologi, dan buka peluang terbaik untuk menjual gadget lama Anda secara aman. ",
     }
-    return render(request, "index.html", context)   
+    return render(request, "index.html", context)

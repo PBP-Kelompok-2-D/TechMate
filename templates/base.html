@@ -16,7 +16,7 @@
             <a href="{% url 'main:show_main' %}" class="nav-link">Home</a>
             <a href="#discover" class="nav-link">Gadget</a>
             <a href="#troubleshoot" class="nav-link">Troubles</a>
-            <a href="#forum" class="nav-link">Forum</a>
+            <a href="{% url 'community:show_forum' %}" class="nav-link">Forum</a>
             <a href="#marketplace" class="nav-link">Shop</a>
 
             {% if user.is_authenticated %}
