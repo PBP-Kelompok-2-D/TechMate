@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block meta %}
+<title>Blog - {{ name }}</title>
+{% endblock meta %}
+
+{% block content %}
+    <main>
+        <div>
+            <div> {{blog}} </div>
+            <div>
+                {{ blog.description }}
+            </div>
+            <div>
+                {{ blog.content }}
+            </div>
+            {% for comment in comments %}
+                <div>
+                    {{ blog }}
+                    <div>
+                        comment
+                    </div>
+                </div>
+
+                {% empty %}
+                <div> No comments yet</div>
+                {% endfor %}
+        </div>
+    </main>
+{% endblock content %}

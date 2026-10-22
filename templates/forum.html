@@ -4,4 +4,17 @@
 {% endblock meta %}
 
 {% block content %}
+    <main>
+        <div>
+            {% for blog in blog_list %}
+                <div>
+                    <a href="{% url 'community:blog_detail' blog.slug %}">{{ blog }}</a>
+                    <p>{{ blog.description }}</p>
+                </div>
+
+                {% empty %}
+                <div> Belum ada blog</div>
+                {% endfor %}
+        </div>
+    </main>
 {% endblock content %}
