@@ -4,47 +4,113 @@
 {% endblock meta %}
 
 {% block content %}
-    <main>
-        <section class="hero-section">
-            <div class="hero-content">
-                <h1 class="hero-title">{{ welcoming }}</h1>
-                <p class="hero-description">{{ description }}</p>
-            </div>
-            <div class="hero-image-wrapper">
-                <img src="/static/img/vector_gadget.svg" alt="Tech Illustration" class="hero-image">
-            </div>
-        </section>
+<main>
 
-        <section class="feature-cards">
-            <a href="#" class="card">
-                <div class="card-preview">
-                    <img src="/static/img/preview_discover.svg" alt="Gadget">
-                </div>
-                <div class="card-body">
-                    <h2 class="card-title">Discover</h2>
-                    <p class="card-text">Cari perangkat yang Anda ingin</p>
-                </div>
+    <section class="hero" id="home">
+        <div class="hero-text">
+            <h1 class="hero-title">Find your <br>need in <span>tech</span></h1>
+            <p class="hero-desc">
+                Temukan perangkat yang pas dengan kebutuhan dan kantong Anda. Bagikan ulasan nyata
+                di komunitas penggemar teknologi, dan buka peluang terbaik untuk menjual gadget lama Anda secara aman.
+            </p>
+            <div class="hero-actions">
+                <a href="#discover" class="btn btn-primary">Mulai Cari Gadget</a>
+                <a href="{% url 'community:show_forum' %}" class="btn btn-ghost">Gabung Komunitas</a>
+            </div>
+        </div>
+
+            <img src="/static/img/vector_gadget.svg" alt="Ilustrasi gadget" class="hero-img">
+    </section>
+
+    
+    <section class="section">
+        <div class="section-head">
+            <span class="eyebrow">Fitur</span>
+            <h2 class="section-title">Jelajahi</h2>
+            <p class="section-desc">Dari memilih perangkat, bertanya ke komunitas, sampai menjual gadget bekas.</p>
+        </div>
+
+        <div class="card-grid">
+            <!-- TODO: ganti href="#" dengan url modul Device Explorer -->
+            <a href="#" class="feature-card">
+                <article id="discover">
+                    <div class="placeholder">Gambar</div>
+                    <div class="feature-body">
+                        <h3>Discover</h3>
+                        <p>Cari perangkat yang Anda inginkan lewat filter harga, spesifikasi, dan kebutuhan.</p>
+                    </div>
+                </article>
             </a>
 
-            <a href="{% url 'community:show_forum' %}" class="card">
-                <div class="card-preview">
-                    <img src="/static/img/preview_community.svg" alt="Community">
-                </div>
-                <div class="card-body">
-                    <h2 class="card-title">Community</h2>
-                    <p class="card-text">Bagikan ulasan dan tanya jawab seputar gadget</p>
-                </div>
+            <a href="{% url 'community:show_forum' %}" class="feature-card">
+                <article  id="community">
+                    <div class="placeholder">Gambar</div>
+                    <div class="feature-body">
+                        <h3>Community</h3>
+                        <p>Bagikan ulasan dan tanya jawab seputar gadget bersama sesama pengguna.</p>
+                    </div>
+                </article>
             </a>
-            
-            <a href="#" class="card">
-                <div class="card-preview">
-                    <img src="/static/img/preview_shop.svg" alt="Shop">
-                </div>
-                <div class="card-body">
-                    <h2 class="card-title">Shop & Sell</h2>
-                    <p class="card-text">Jual dan beli perangkat seken terpercaya</p>
-                </div>
+
+            <!-- TODO: ganti href dengan url modul Marketplace -->
+            <a href="#marketplace" class="feature-card">
+                <article  id="marketplace">
+                    <div class="placeholder">Gambar</div>
+                    <div class="feature-body">
+                        <h3>Shop & Sell</h3>
+                        <p>Jual dan beli perangkat seken terpercaya dengan kondisi barang yang transparan.</p>
+                    </div>
+                </article>
             </a>
-        </section>
-    </main>
+        </div>
+    </section>
+
+    <!-- coba coba rekomendasi -->
+    <section class="section" id="marketplace">
+        <div class="section-head">
+            <span class="eyebrow">Marketplace</span>
+            <h2 class="section-title">Gadget seken rekomendasi</h2>
+            <p class="section-desc">Beli gadget yang mungkin anda butuhkan.</p>
+        </div>
+
+        <div class="product-grid">
+            <article class="product-card">
+                <div class="placeholder">Foto produk</div>
+                <div class="product-info">
+                    <span class="badge">Mulus</span>
+                    <h3>Nama Smartphone</h3>
+                    <p class="product-meta">Baterai 90% · COD Depok</p>
+                    <p class="product-price">Rp 0.000.000</p>
+                </div>
+            </article>
+            <article class="product-card">
+                <div class="placeholder">Foto produk</div>
+                <div class="product-info">
+                    <span class="badge badge-warm">Normal</span>
+                    <h3>Nama Laptop</h3>
+                    <p class="product-meta">RAM 16 GB · COD Jakarta</p>
+                    <p class="product-price">Rp 0.000.000</p>
+                </div>
+            </article>
+            <article class="product-card">
+                <div class="placeholder">Foto produk</div>
+                <div class="product-info">
+                    <span class="badge">Mulus</span>
+                    <h3>Nama Tablet</h3>
+                    <p class="product-meta">Fullset · COD Bogor</p>
+                    <p class="product-price">Rp 0.000.000</p>
+                </div>
+            </article>
+            <article class="product-card">
+                <div class="placeholder">Foto produk</div>
+                <div class="product-info">
+                    <span class="badge badge-warm">Minus ringan</span>
+                    <h3>Nama Smartphone</h3>
+                    <p class="product-meta">Baterai 82% · COD Bekasi</p>
+                    <p class="product-price">Rp 0.000.000</p>
+                </div>
+            </article>
+        </div>
+    </section>
+</main>
 {% endblock content %}
