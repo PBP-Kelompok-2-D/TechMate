@@ -371,6 +371,17 @@ main { flex-grow: 1; }
 .product-meta { font-size: 0.8rem; color: var(--text-muted); }
 .product-price { font-family: var(--font-heading); font-weight: 600; color: var(--accent); }
 
+.comment-form{
+    width: 100%;
+    max-width: 100%;
+    margin-top: 1.5rem;
+}
+
+.form-comment-group label{
+    display: block;
+    margin-bottom: 0.4rem;
+    font-weight: 700;
+}
 
 
 /* Auth */
