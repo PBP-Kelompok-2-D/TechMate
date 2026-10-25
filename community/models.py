@@ -12,6 +12,9 @@ class Blog(models.Model):
     description = models.CharField(max_length=355, null=True)
     content = models.TextField()
     published_date_time = models.DateTimeField(default=timezone.now)
+    upvoted_by = models.ManyToManyField(
+        User, related_name="upvotes", blank=True
+    )
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
@@ -21,7 +24,7 @@ class Blog(models.Model):
         return self.title
     
 class Comment(models.Model):
-    CommentPost = models.ForeignKey(Blog , on_delete=models.CASCADE)
+    CommentPost = models.ForeignKey(Blog , on_delete=models.CASCADE, related_name='comments')
     author = models.ForeignKey(User , on_delete=models.CASCADE)
     content = models.TextField()
     date_posted = models.DateTimeField(auto_now_add=True)

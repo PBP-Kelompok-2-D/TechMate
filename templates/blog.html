@@ -1,40 +1,145 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block meta %}
-<title>Blog - {{ name }}</title>
+<title>{{ blog.title }} - {{ name }}</title>
 {% endblock meta %}
 
 {% block content %}
-    <main>
-        <div>
-            <div> {{blog}} </div>
-            <div>
-                {{ blog.description }}
-            </div>
-            <div>
-                {{ blog.content }}
+<main class="community-page blog-page">
+    <a href="{% url 'community:show_forum' %}" class="back-to-forum">
+        <span aria-hidden="true">←</span> Kembali ke forum
+    </a>
+
+    <article class="article-card" id="post-{{ blog.pk }}">
+        <header class="article-header">
+            <div class="post-meta">
+                <span class="post-avatar" aria-hidden="true">{{ blog.author.username|first|upper }}</span>
+                <strong class="post-author">{{ blog.author.username }}</strong>
+                <span aria-hidden="true">•</span>
+                <time datetime="{{ blog.published_date_time|date:'c' }}">{{ blog.published_date_time|date:"d M Y · H:i" }}</time>
             </div>
 
-            <h2>Comments</h2>
+            <h1>{{ blog.title }}</h1>
 
-            {% if user.is_authenticated %}
-                <form action="" method="POST" id="main_form" class="comment-form">
-                    <div class="form-comment-group">
-                        <label for="comment">Type Comment here</label>
-                    {{ comment_form.content }} {% csrf_token %} <input type="submit" value="Post"></div>
-                </form>
-            {% else %} <h2>You need to Login to comment</h2> 
+            {% if blog.description %}
+                <p class="post-summary">
+                    <span class="post-summary-label">Deskripsi</span>
+                    {{ blog.description }}
+                </p>
             {% endif %}
+        </header>
 
-            {% for comment in comments %}
-                {% if comment.is_parent %}
-                    <h3> <b>{{ comment.author }} : </b> {{ comment.content }}</h3> 
-                {% endif %} 
-                {% for replies in comment.children %}
-                    <h3>&nbsp; &nbsp; &nbsp; <b>{{ comment.author }} : </b> {{ replies.content }}</h3>
-                {% endfor %}
-                {% empty %}
-                <div> No comments yet</div>
-            {% endfor %}    
+        
+
+        <div class="article-content">{{ blog.content|linebreaks }}</div>
+
+        <footer class="article-footer">
+            <div class="post-actions">
+                {% include "components/blog_upvote.html" with blog=blog %}
+
+                <a href="#comments" class="pill-button comment-button" aria-label="{{ comments|length }} komentar">
+                    <img src="/static/img/comment.svg" alt="comment">
+                    <span class="pill-count">{{ comments|length }}</span>
+                </a>
+            </div>
+        </footer>
+    </article>
+
+    <section class="discussion-section" id="comments" aria-labelledby="comments-heading">
+        <div class="community-section-heading">
+            <div>
+                <h2 id="comments-heading">Komentar</h2>
+                <p>Punya pendapat atau pertanyaan? Bagikan dengan sopan.</p>
+            </div>
+            <span class="community-count">{{ comments|length }} komentar</span>
         </div>
-    </main>
+
+        {% if user.is_authenticated %}
+            <form method="POST" action="{% url 'community:blog_detail' blog.slug %}" class="comment-compose">
+                {% csrf_token %}
+                {{ comment_form.parent.as_hidden }}
+
+                <label for="{{ comment_form.content.id_for_label }}">Tulis komentar</label>
+                {{ comment_form.content }}
+
+                {% if comment_form.content.errors %}
+                    <div class="comment-errors" role="alert">
+                        {{ comment_form.content.errors }}
+                    </div>
+                {% endif %}
+
+                <button type="submit" class="community-button">Kirim komentar</button>
+            </form>
+        {% else %}
+            <div class="comment-login-notice">
+                <span>Login untuk ikut berdiskusi.</span>
+                <a href="{% url 'main:login' %}" class="community-button">Login</a>
+            </div>
+        {% endif %}
+
+        {% if comments %}
+            <ul class="comment-thread">
+                {% for comment in comments %}
+                    {% if comment.is_parent %}
+                        <li class="comment-node" id="comment-{{ comment.pk }}">
+                            <article class="comment-item">
+                                <header class="post-meta comment-meta">
+                                    <span class="post-avatar post-avatar--sm" aria-hidden="true">{{ comment.author.username|first|upper }}</span>
+                                    <strong class="post-author">{{ comment.author.username }}</strong>
+                                    {% if comment.author_id == blog.author_id %}<span class="badge">Penulis</span>{% endif %}
+                                    <span aria-hidden="true">•</span>
+                                    <time datetime="{{ comment.date_posted|date:'c' }}">{{ comment.date_posted|date:"d M Y · H:i" }}</time>
+                                </header>
+
+                                <div class="comment-text">{{ comment.content|linebreaksbr }}</div>
+
+                                {% if user.is_authenticated %}
+                                    <details class="reply-box">
+                                        <summary aria-label="Balas komentar {{ comment.author.username }}">Balas</summary>
+                                        <form method="POST" action="{% url 'community:blog_detail' blog.slug %}" class="comment-compose">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="parent" value="{{ comment.pk }}">
+
+                                            <label for="reply-content-{{ comment.pk }}">Tulis balasan</label>
+                                            <textarea
+                                                id="reply-content-{{ comment.pk }}"
+                                                name="content"
+                                                placeholder="Tulis balasan..."
+                                                required
+                                            ></textarea>
+
+                                            <button type="submit" class="community-button">Kirim balasan</button>
+                                        </form>
+                                    </details>
+                                {% endif %}
+                            </article>
+
+                            {% if comment.children %}
+                                <ul class="comment-replies">
+                                    {% for reply in comment.children %}
+                                        <li class="comment-node" id="comment-{{ reply.pk }}">
+                                            <article class="comment-item">
+                                                <header class="post-meta comment-meta">
+                                                    <span class="post-avatar post-avatar--sm" aria-hidden="true">{{ reply.author.username|first|upper }}</span>
+                                                    <strong class="post-author">{{ reply.author.username }}</strong>
+                                                    {% if reply.author_id == blog.author_id %}<span class="badge">Penulis</span>{% endif %}
+                                                    <span aria-hidden="true">•</span>
+                                                    <time datetime="{{ reply.date_posted|date:'c' }}">{{ reply.date_posted|date:"d M Y · H:i" }}</time>
+                                                </header>
+                                                <div class="comment-text">{{ reply.content|linebreaksbr }}</div>
+                                            </article>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="comments-empty">Belum ada komentar. Mulai diskusinya!</p>
+        {% endif %}
+    </section>
+</main>
 {% endblock content %}
