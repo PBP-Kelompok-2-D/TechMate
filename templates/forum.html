@@ -1,20 +1,104 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block meta %}
 <title>Forum - {{ name }}</title>
 {% endblock meta %}
 
 {% block content %}
-    <main>
-        <div>
-            {% for blog in blog_list %}
-                <div>
-                    <a href="{% url 'community:blog_detail' blog.slug %}">{{ blog }}</a>
-                    <p>{{ blog.description }}</p>
-                </div>
+<main class="community-page">
+    <section class="community-hero" aria-labelledby="forum-title">
+        <div class="community-hero-copy">
+            <h1 id="forum-title">Welcome to<br><span>Community</span></h1>
+            <p>
+                Bagikan pengalaman, rekomendasi atau ajukan pertanyaan
+                mengenai gadget yang anda incar!
+            </p>
 
-                {% empty %}
-                <div> Belum ada blog</div>
-                {% endfor %}
+            <div class="community-hero-actions">
+                <a href="#diskusi" class="community-button">Jelajahi <span aria-hidden="true">↓</span></a>
+
+                <form method="get" action="{% url 'community:show_forum' %}#diskusi" class="forum-search" role="search">
+                    <label for="forum-search-input" class="visually-hidden">Cari diskusi berdasarkan judul</label>
+                    <input type="search" id="forum-search-input" name="title"
+                           value="{{ title_query|default:'' }}" placeholder="Search" maxlength="255">
+                    <button type="submit" aria-label="Cari">
+                        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+                            <circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="2.4"/>
+                            <path d="m16 16 4.5 4.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </form>
+            </div>
         </div>
-    </main>
+
+    </section>
+
+    <section class="community-list-section forum-layout" id="diskusi">
+        <div class="forum-feed">
+            <div class="community-section-heading">
+                <div>
+                    {% if title_query %}
+                        <h2>Hasil untuk “{{ title_query }}”</h2>
+                        <p><a href="{% url 'community:show_forum' %}#diskusi" class="forum-reset-link">Hapus pencarian</a></p>
+                    {% else %}
+                        <h2>Obrolan terbaru</h2>
+                    {% endif %}
+                </div>
+                <span class="community-count">{{ blog_list|length }} topik</span>
+            </div>
+
+            <ul class="post-list">
+                {% for blog in blog_list %}
+                    <li>
+                        <article class="post-row" id="post-{{ blog.pk }}">
+                            <div class="post-meta">
+                                <span class="post-avatar" aria-hidden="true">{{ blog.author.username|first|upper }}</span>
+                                <span class="post-author">{{ blog.author.username }}</span>
+                                <span aria-hidden="true">•</span>
+                                <time datetime="{{ blog.published_date_time|date:'c' }}">{{ blog.published_date_time|date:"d M Y · H:i" }}</time>
+                            </div>
+
+                            <h3 class="post-title">
+                                <a href="{% url 'community:blog_detail' blog.slug %}" class="post-link">{{ blog.title }}</a>
+                            </h3>
+
+                            {% if blog.description %}
+                                <p class="post-description">{{ blog.description }}</p>
+                            {% endif %}
+
+                            <div class="post-actions">
+                                {% include "components/blog_upvote.html" with blog=blog %}
+
+                                <a href="{% url 'community:blog_detail' blog.slug %}#comments"
+                                   class="pill-button comment-button"
+                                   aria-label="{{ blog.comment_set.count }} komentar">
+                                    <img src="/static/img/comment.svg" alt="comment">
+                                    <span class="pill-count">{{ blog.comments.count }}</span>
+                                </a>
+                            </div>
+                        </article>
+                    </li>
+                {% empty %}
+                    <li>
+                        <div class="community-empty">
+                            <span class="empty-mark" aria-hidden="true">✳</span>
+                            {% if title_query %}
+                                <h3>Tidak ada diskusi yang cocok</h3>
+                                <p>Coba kata kunci lain atau hapus pencarian.</p>
+                            {% else %}
+                                <h3>Belum ada diskusi</h3>
+                                <p>Topik komunitas akan muncul di sini setelah tersedia.</p>
+                            {% endif %}
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <aside class="forum-options" aria-labelledby="forum-options-title">
+            <h2 id="forum-options-title">Option</h2>
+        </aside>
+    </section>
+</main>
 {% endblock content %}
