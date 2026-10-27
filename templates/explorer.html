@@ -1,11 +1,11 @@
+{% extends 'base.html' %}
+
 {% comment %}
 explorer.html — The Explorer page. Shows one search form (RAM, Storage, VRAM,
 Intended Use) and, below it, a grid of matching laptop cards. The form uses
 method="post", so the search only runs when the user clicks the button —
 there is no live/AJAX searching, which keeps us within the API rate limit.
 {% endcomment %}
-
-{% extends 'base.html' %}
 
 {% block meta %}
 <title>Explorer - TechMate</title>
