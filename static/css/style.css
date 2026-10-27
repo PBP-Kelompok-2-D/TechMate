@@ -118,6 +118,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
     border-radius: var(--radius-xl);
     padding: var(--space-4);
     width: 100%;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -497,6 +498,181 @@ main { flex-grow: 1; }
     text-decoration: underline;
 }
 
+/* Profile */
+
+.profile-dashboard {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        min-height: calc(100vh - 120px);
+        padding: var(--space-4) var(--space-2);
+    }
+
+    .profile-grid {
+        display: grid;
+        grid-template-columns: 280px 480px;
+        gap: var(--space-3);
+        margin-bottom: var(--space-3);
+        width: 100%;
+        max-width: 780px;
+    }
+
+    /* Kartu dasar menggunakan variabel style.css */
+    .profile-card {
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-lg);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        box-shadow: var(--shadow-md);
+    }
+
+    /* Kartu Kiri: Avatar & User Info */
+.profile-user-card {
+    padding: var(--space-4) var(--space-3);
+}
+
+.avatar-wrapper {
+    width: 140px;
+    height: 140px;
+    border-radius: var(--radius-full);
+    background-color: var(--bg-placeholder);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-bottom: var(--space-3);
+}
+
+.avatar-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-username {
+    color: var(--text-primary);
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.profile-last-login {
+    margin-top: var(--space-2);
+    padding-top: var(--space-1);
+    border-top: 1px dashed var(--border-strong);
+    width: 80%;
+}
+
+.profile-last-login span {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    display: block;
+}
+
+/* Kolom Kanan: Bio & Placeholder */
+.profile-right-column {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.bio-card {
+    padding: var(--space-3);
+    min-height: 85px;
+    color: var(--text-secondary);
+    font-style: italic;
+    font-size: 0.95rem;
+    border-radius: var(--radius-lg);
+}
+
+.actions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+    height: 100%;
+}
+
+.action-card {
+    padding: var(--space-4) var(--space-2);
+    cursor: pointer;
+    transition: var(--trans02);
+}
+
+.action-card:hover {
+    background-color: var(--bg-card-hover);
+    transform: translateY(-4px);
+    border-color: var(--border-strong);
+}
+
+.action-icon {
+    width: 56px;
+    height: 56px;
+    stroke: var(--text-primary);
+    fill: none;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    margin-bottom: var(--space-2);
+}
+
+.action-label {
+    color: var(--text-primary);
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+/* Tombol Aksi Bawah */
+.profile-footer-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 780px;
+    gap: var(--space-2);
+}
+
+.edit-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: var(--trans02);
+}
+
+.edit-link:hover {
+    color: var(--accent);
+    text-decoration: underline;
+}
+
+.btn-logout {
+    display: block;
+    width: 100%;
+    padding: 0.85rem;
+    background-color: #820000;
+    color: var(--text-primary);
+    text-align: center;
+    text-decoration: none;
+    font-weight: 700;
+    border-radius: var(--radius-full);
+    transition: var(--trans02);
+}
+
+.btn-logout:hover {
+    background-color: #a40000;
+}
+
+.messages-container{
+    margin-bottom: var(--space-3);
+    z-index: 1000;
+}
 /* COm */
 .community-page {
     width: 100%;
