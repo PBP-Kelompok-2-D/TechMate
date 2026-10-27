@@ -1,0 +1,153 @@
+{% comment %}
+explorer.html — The Explorer page. Shows one search form (RAM, Storage, VRAM,
+Intended Use) and, below it, a grid of matching laptop cards. The form uses
+method="post", so the search only runs when the user clicks the button —
+there is no live/AJAX searching, which keeps us within the API rate limit.
+{% endcomment %}
+
+{% extends 'base.html' %}
+
+{% block meta %}
+<title>Explorer - TechMate</title>
+<style>
+    /* One small addition: the existing .form-group CSS only styles <input>,
+       so we copy that same look for our <select> dropdowns to match. */
+    .form-group select {
+        background-color: #0B1924;
+        border: 1px solid var(--bg-surface);
+        border-radius: var(--radius-md);
+        padding: 0.65rem 0.85rem;
+        color: #FFFFFF;
+        font-size: 0.95rem;
+    }
+    .form-group select:focus { outline: none; border-color: var(--accent); }
+    /* Lay the four filters out side by side on wide screens. */
+    .explorer-form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1rem;
+    }
+</style>
+{% endblock meta %}
+
+{% block content %}
+<main>
+    <section class="section">
+        <div class="section-head">
+            <span class="eyebrow">Explorer</span>
+            <h2 class="section-title">Find the right laptop</h2>
+            <p class="section-desc">
+                Tell us your needs, press search once, and we will fetch
+                matching laptops for you.
+            </p>
+        </div>
+
+        <!-- The search form. method="post" sends the data back to the same
+             URL as a POST request. {% csrf_token %} is Django's protection
+             against cross-site request forgery attacks and is required. -->
+        <form method="POST" class="explorer-form-grid">
+            {% csrf_token %}
+
+            <!-- RAM: dropdown keeps the values clean (no typos to send
+                 to the API). value="" means "Any" (no filter). -->
+            <div class="form-group">
+                <label for="ram">RAM</label>
+                <select name="ram" id="ram">
+                    <option value="">Any</option>
+                    <option value="4">4 GB</option>
+                    <option value="8">8 GB</option>
+                    <option value="16">16 GB</option>
+                    <option value="32">32 GB</option>
+                    <option value="64">64 GB</option>
+                </select>
+            </div>
+
+            <!-- Storage: same dropdown idea, values in gigabytes. -->
+            <div class="form-group">
+                <label for="storage">Storage</label>
+                <select name="storage" id="storage">
+                    <option value="">Any</option>
+                    <option value="256">256 GB</option>
+                    <option value="512">512 GB</option>
+                    <option value="1024">1 TB</option>
+                    <option value="2048">2 TB</option>
+                </select>
+            </div>
+
+            <!-- VRAM: dedicated graphics memory. 0 = no dedicated GPU. -->
+            <div class="form-group">
+                <label for="vram">VRAM</label>
+                <select name="vram" id="vram">
+                    <option value="">Any</option>
+                    <option value="0">No dedicated GPU</option>
+                    <option value="2">2 GB</option>
+                    <option value="4">4 GB</option>
+                    <option value="6">6 GB</option>
+                    <option value="8">8 GB</option>
+                    <option value="16">16 GB</option>
+                </select>
+            </div>
+
+            <!-- Intended use: what the laptop will mainly be used for. -->
+            <div class="form-group">
+                <label for="use_case">Intended Use</label>
+                <select name="use_case" id="use_case">
+                    <option value="">Any</option>
+                    <option value="Gaming">Gaming</option>
+                    <option value="Video Editing">Video Editing</option>
+                    <option value="Graphic Design">Graphic Design</option>
+                    <option value="Programming">Programming</option>
+                    <option value="Office">Office / Daily Use</option>
+                    <option value="Student">Student</option>
+                </select>
+            </div>
+
+            <!-- The ONE button that triggers the (single) API request. -->
+            <div class="form-group">
+                <label>&nbsp;</label><!-- keeps the button aligned with the dropdowns -->
+                <button type="submit" class="btn btn-primary">Search Laptops</button>
+            </div>
+        </form>
+    </section>
+
+    <!-- Results section ------------------------------------------------>
+    <section class="section">
+        {% if error_message %}
+            <!-- Shown only when the API call failed (bad key, no internet...). -->
+            <p class="form-error">{{ error_message }}</p>
+        {% endif %}
+
+        {% if laptops %}
+            <div class="section-head">
+                <h2 class="section-title">Results</h2>
+                <p class="section-desc">{{ laptops|length }} laptop(s) found.</p>
+            </div>
+
+            <!-- Loop over the 'laptops' variable sent by the view and print
+                 one card per laptop using the site's existing card styles. -->
+            <div class="card-grid">
+                {% for laptop in laptops %}
+                    <article class="feature-card">
+                        <div class="feature-body">
+                            <h3>{{ laptop.name }}</h3>
+                            <p class="product-price">${{ laptop.price }}</p>
+                            <p class="product-meta">
+                                CPU: {{ laptop.cpu }}<br>
+                                RAM: {{ laptop.ram_gb }} GB &middot;
+                                Storage: {{ laptop.storage_gb }} GB &middot;
+                                VRAM: {{ laptop.vram_gb }} GB
+                            </p>
+                            {% if laptop.recommended_for %}
+                                <span class="badge">{{ laptop.recommended_for }}</span>
+                            {% endif %}
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        {% elif not error_message %}
+            <!-- Friendly empty state before the very first search. -->
+            <p class="section-desc">No laptops to show yet — try a search above!</p>
+        {% endif %}
+    </section>
+</main>
+{% endblock content %}
