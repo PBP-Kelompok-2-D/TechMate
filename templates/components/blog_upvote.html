@@ -1,0 +1,13 @@
+<form method="post" action="{% url 'community:toggle_upvote' blog.slug %}" class="upvote-form">
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{{ request.get_full_path }}#post-{{ blog.pk }}">
+    <button type="submit"
+            class="pill-button upvote-button{% if user in blog.upvoted_by.all %} is-upvoted{% endif %}"
+            title="{% if blog.upvoted_by.all %}Di-upvote oleh {{ blog.upvoted_by.all|join:', ' }}{% else %}Jadilah yang pertama memberi upvote{% endif %}">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M12 3 4 12h5v8h6v-8h5z"/>
+        </svg>
+        <span>{% if user in blog.upvoted_by.all %}Upvoted{% else %}Upvote{% endif %}</span>
+        <span class="pill-count">{{ blog.upvoted_by.count }}</span>
+    </button>
+</form>
