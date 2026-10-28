@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="main-content-community" style="padding: 20px; max-width: 800px; margin: 0 auto;">
+    
+    <div class="community-hero-section" style="margin-bottom: 30px;">
+        <h1 class="community-hero-title" style="color: #fff;">
+            {% if is_edit %}Edit Obrolan{% else %}Buat Obrolan Baru{% endif %}
+        </h1>
+        <p class="community-hero-desc" style="color: #a0aab2;">Tanyakan sesuatu atau bagikan informasi bermanfaat kepada komunitas.</p>
+    </div>
+
+    <div class="community-form-card" style="background-color: #1e2538; padding: 30px; border-radius: 12px; border: 1px solid #2a3441;">
+        <form action="" method="POST">
+            {% csrf_token %}
+            
+            <div style="margin-bottom: 20px;">
+                <label style="color: #a0aab2; display: block; margin-bottom: 8px; font-weight: bold;">Judul Obrolan</label>
+                <input type="text" name="title" value="{{ form.title.value|default_if_none:'' }}" 
+                       style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #2a3441; background-color: #151a28; color: #fff; outline: none;" 
+                       placeholder="Contoh: Rekomendasi laptop untuk mahasiswa CS..." required>
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <label style="color: #a0aab2; display: block; margin-bottom: 8px; font-weight: bold;">Deskripsi Singkat</label>
+                <input type="text" name="description" value="{{ form.description.value|default_if_none:'' }}" 
+                       style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #2a3441; background-color: #151a28; color: #fff; outline: none;" 
+                       placeholder="Ringkasan topikmu...">
+            </div>
+
+            <div style="margin-bottom: 30px;">
+                <label style="color: #a0aab2; display: block; margin-bottom: 8px; font-weight: bold;">Isi Diskusi</label>
+                <textarea name="content" 
+                          style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #2a3441; background-color: #151a28; color: #fff; outline: none; min-height: 200px;" 
+                          placeholder="Jelaskan pertanyaan atau topikmu secara detail di sini..." required>{{ form.content.value|default_if_none:'' }}</textarea>
+            </div>
+            
+            <div style="display: flex; gap: 15px;">
+                <button type="submit" style="background-color: #4cc9f0; color: #000; padding: 12px 25px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
+                    Kirim Obrolan
+                </button>
+                <a href="{% url 'community:show_forum' %}" style="background-color: #2a3441; color: #fff; padding: 12px 25px; border: none; border-radius: 8px; font-weight: bold; text-decoration: none; cursor: pointer;">
+                    Batal
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
