@@ -7,7 +7,6 @@ from marketplace.views import index, contact, detail, new, delete, edit, new_con
 app_name = 'marketplace'
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('', index, name="index"),
     path('contact/', contact, name="contact"),
     path('<int:pk>/', detail, name="detail" ),
