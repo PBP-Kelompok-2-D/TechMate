@@ -3,7 +3,15 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Category(models.Model):
-    name = models.CharField(max_length = 255)
+    CATEGORY_CHOICES = [
+        ("smartphone", "Smartphone"),
+        ("laptop", "Laptop"),
+        ("tablet", "Tablet"),
+    ]
+    name = models.CharField(
+        max_length = 20,
+        choices = CATEGORY_CHOICES,
+        default= "smartphone",)
 
     class Meta:
         ordering = ['name', ]
@@ -13,12 +21,22 @@ class Category(models.Model):
         return self.name
 
 class Item(models.Model):
-    category = models.ForeignKey(Category, related_name='items', on_delete=models.CASCADE)
+    CATEGORY_CHOICES = [
+        ("smartphone", "Smartphone"),
+        ("laptop", "Laptop"),
+        ("tablet", "Tablet"),
+    ]
+
+    category = models.CharField(
+        max_length = 20,
+        choices = CATEGORY_CHOICES,
+        default= "smartphone",)
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     price = models.FloatField()
     is_sold = models.BooleanField(default=False)
     image = models.URLField( blank=True, null=True)
+    contact_number = models.CharField(max_length=50, blank=True, null=True, help_text="Nomor WhatsApp (misal: 6281234567890) atau Username/Link Kontak")
     created_by = models.ForeignKey(User, related_name='items', on_delete = models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 

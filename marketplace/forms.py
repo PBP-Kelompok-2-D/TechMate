@@ -7,7 +7,7 @@ INPUT_CLASS = 'w-full py-4 px-6 rounded-xl border'
 class NewItemForm(forms.ModelForm):
     class Meta:
         model = Item
-        fields = ['category', 'name', 'description', 'price', 'image', ]
+        fields = ['category', 'name', 'description', 'price', 'image', 'contact_number',]
 
         widgets = {
             'category' : forms.Select(attrs={
@@ -24,7 +24,11 @@ class NewItemForm(forms.ModelForm):
             }),
             'image' : forms.FileInput(attrs={
                             'class': INPUT_CLASS
-            })
+            }),
+            'contact_number': forms.TextInput(attrs={
+                'class': INPUT_CLASS,
+                'placeholder': 'Nomor WhatsApp (contoh: 6285817544682) atau Link IG'
+            }),
         }
 
 class EditItemForm(forms.ModelForm):

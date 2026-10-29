@@ -1,15 +1,22 @@
 {% extends 'base.html' %}
 
-{% block title %}{{title}}{% endblock %}
+{% block meta %}
+<title>{{ title }} - Marketplace</title>
+{% endblock meta %}
 
 {% block content %}
-<h1 class="mb-6 text-3xl">{{title}}</h1>
+<main style="padding: 2rem; max-width: 600px; margin: 0 auto;">
+    <h1 style="color: white; font-size: 2rem; margin-bottom: 1.5rem;">{{ title }}</h1>
 
-<form method="post" action="." enctype="multipart/form-data">
-    {% csrf_token %}
-
-    <div class="space-y-4">
-        {{form.as_p}}
-    </div>
-</form>
-{% endblock}
+    <form method="post" enctype="multipart/form-data" style="display: flex; flex-direction: column; gap: 1rem;">
+        {% csrf_token %}
+        
+        <!-- Render form secara otomatis menggunakan as_p atau per field -->
+        {{ form.as_p }}
+        
+        <button type="submit" class="btn btn-primary" style="background-color: #0284c7; color: white; padding: 0.75rem; border-radius: 0.75rem; font-weight: bold; cursor: pointer; border: none; margin-top: 1rem;">
+            Simpan Produk
+        </button>
+    </form>
+</main>
+{% endblock content %}
