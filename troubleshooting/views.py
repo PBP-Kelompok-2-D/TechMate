@@ -30,35 +30,32 @@ def troubleshooting_list(request):
 
 
 def filter_articles_ajax(request):
-    """Endpoint AJAX GET untuk live search dan filter artikel gejala kerusakan"""
     query = request.GET.get('q', '').strip()
     device = request.GET.get('device', '')
     category = request.GET.get('category', '')
-    recommendation = request.GET.get('recommendation', '')
     bookmarked_only = request.GET.get('bookmarked', '') == 'true'
 
+    # Mulai dengan semua artikel
     articles = TroubleshootingArticle.objects.all().order_by('-created_at')
 
+    # Terapkan filter SATU PER SATU
     if query:
-        articles = articles.filter(
-            Q(title__icontains=query) |
-            Q(symptoms__icontains=query) |
-            Q(causes__icontains=query)
-        )
+        articles = articles.filter(Q(title__icontains=query) | Q(symptoms__icontains=query) | Q(causes__icontains=query))
+    
     if device:
-        articles = articles.filter(device_type=device)
+        # Tampilkan perangkat spesifik ATAU yang bersifat 'ALL'
+        articles = articles.filter(device_type__in=[device, 'ALL'])
+        
     if category:
         articles = articles.filter(category=category)
-    if recommendation:
-        articles = articles.filter(recommendation=recommendation)
+        
     if bookmarked_only and request.user.is_authenticated:
         articles = articles.filter(bookmarks__user=request.user)
 
+    # Ambil data bookmark user untuk indikator bintang
     bookmarked_ids = set()
     if request.user.is_authenticated:
-        bookmarked_ids = set(
-            ArticleBookmark.objects.filter(user=request.user).values_list('article_id', flat=True)
-        )
+        bookmarked_ids = set(ArticleBookmark.objects.filter(user=request.user).values_list('article_id', flat=True))
 
     data = []
     for art in articles:
@@ -68,15 +65,14 @@ def filter_articles_ajax(request):
             'slug': art.slug,
             'device_type': art.get_device_type_display(),
             'category': art.get_category_display(),
-            'recommendation_code': art.recommendation,
+            'recommendation_code': art.recommendation, # Asli dari DB
             'recommendation_label': art.get_recommendation_display(),
-            'difficulty': art.get_difficulty_display(),
-            'symptoms_preview': art.symptoms[:120] + '...' if len(art.symptoms) > 120 else art.symptoms,
+            'symptoms_preview': art.symptoms[:100] + '...' if len(art.symptoms) > 100 else art.symptoms,
             'estimated_cost_min': art.estimated_cost_min,
             'estimated_cost_max': art.estimated_cost_max,
             'is_bookmarked': art.id in bookmarked_ids,
         })
-
+        
     return JsonResponse({'articles': data, 'count': len(data)})
 
 
