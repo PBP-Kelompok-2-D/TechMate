@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block meta %}
+<title>Market - {{ name }}</title>
+{% endblock meta %}
+
+{% block content %}
+<main>
+
+
+
+    <!-- coba coba rekomendasi -->
+    <section class="section" id="marketplace">
+        <div class="section-head">
+            <span class="eyebrow">Marketplace</span>
+            <h2 class="section-title">Gadget seken rekomendasi</h2>
+            <p class="section-desc">Beli gadget yang mungkin anda butuhkan.</p>
+        </div>
+
+        <!-- Tombol Tambah Produk di bawah deskripsi -->
+            {% if request.user.is_authenticated %}
+            <div style="margin-top: 1rem;">
+                <a href="{% url 'marketplace:new' %}" class="btn btn-primary" style="text-decoration: none; display: inline-block; background-color: #0284c7; color: white; padding: 0.6rem 1.2rem; border-radius: 0.75rem; font-weight: 600;">
+                    + Tambah Produk
+                </a>
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="product-grid">
+            {% for item in items %}
+            <article class="product-card">
+                <div class="placeholder">
+                    <img src="{item.image}" alt="">
+                </div>
+                <div class="product-info">
+                    <span class="badge">Mulus</span>
+                    <h3>{{ item.name }}</h3>
+                    <p class="product-meta">Baterai 90% · COD Depok</p>
+                    <p class="product-price">Rp { item.price }</p>
+                </div>
+            </article>
+
+            {% empty %}
+            <div> kosong </div>
+            {% endfor %}
+        </div>
+    </section>
+</main>
+{% endblock content %}
