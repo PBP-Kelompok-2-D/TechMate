@@ -1,8 +1,12 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.core.exceptions import PermissionDenied  
 
+from main.models import Profile
+from main.forms import ProfileForm
 import datetime
 
 # Create your views here.
@@ -12,7 +16,8 @@ NAME = "TechMate"
 def register(request):
     form = UserCreationForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
-        form.save()
+        created_user = form.save()
+        Profile.objects.create(user=created_user, avatar="", bio="No bio yet")
         messages.success(request, "Akun berhasil dibuat. Silakan login.")
         return redirect("main:login")
     
@@ -45,9 +50,46 @@ def logout_user(request):
     return response
 
 def show_main(request):
+    last_login = request.COOKIES.get('last_login', 'No log section yet / Cookie not found')
     context = {
         'name': NAME,
         'welcoming':"Find your need in tech",
         'description': "Temukan perangkat yang pas dengan kebutuhan dan kantong Anda. Bagikan ulasan nyata di komunitas penggemar teknologi, dan buka peluang terbaik untuk menjual gadget lama Anda secara aman. ",
+        "last_login": last_login,
     }
     return render(request, "index.html", context)
+
+
+def show_user_profile(request, profile_id):
+    profile = get_object_or_404(Profile, pk=profile_id)
+    viewed_user = profile.user
+    last_login = request.COOKIES.get('last_login', 'No log section yet / Cookie not found')
+    context = {
+        'name': NAME,
+        "profile": profile,
+        "viewed_user": viewed_user,
+        "last_login": last_login,
+    }
+    return render(request, "user_profile.html", context)
+
+@login_required(login_url="/login/")
+def edit_user_profile(request, profile_id):  
+    profile = get_object_or_404(Profile, pk=profile_id)
+    viewed_user = profile.user
+    
+    if not request.user.is_superuser and request.user != viewed_user:
+        raise PermissionDenied
+    
+    form = ProfileForm(request.POST or None, instance=profile)
+
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Profile telah berhasil diperbarui!")
+        return redirect("main:show_user_profile", profile_id=profile.id)
+    
+    context = {
+        "name": NAME,
+        "form": form,
+        "profile": profile,
+    }
+    return render(request, "profile_update_form.html", context)

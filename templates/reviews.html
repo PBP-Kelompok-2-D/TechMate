@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Meniru struktur dan class dari forum utama -->
+<div class="main-content-community">
+    
+    <!-- Hero Section (Mirip dengan Welcome to Community) -->
+    <div class="community-hero-section" style="margin-bottom: 30px;">
+        <h1 class="community-hero-title">Review & Durabilitas Gadget</h1>
+        <p class="community-hero-desc">Bagikan pengalamanmu mengenai gadget yang kamu pakai!</p>
+        <div class="community-action-buttons">
+            <a href="{% url 'community:show_forum' %}" class="community-btn-primary" style="text-decoration: none; display: inline-block;">⬅ Kembali ke Forum</a>
+        </div>
+    </div>
+
+    <!-- Container Utama: Form & Daftar Review -->
+    <div class="community-layout-grid" style="display: flex; gap: 20px;">
+        
+        <!-- KOLOM KIRI: Daftar Ulasan -->
+        <div class="community-topics-section" style="flex: 2;">
+            <h2 class="community-section-title">Ulasan Komunitas</h2>
+            
+            <div class="community-topics-list">
+                {% for review in reviews %}
+                    <!-- Meniru gaya kotak obrolan -->
+                    <div class="community-topic-card" style="background-color: #1e2538; padding: 20px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #2a3441;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <h3 style="color: #4cc9f0; margin: 0; font-size: 1.2rem;">{{ review.device_name }}</h3>
+                            <span style="background-color: #fca311; color: #14213d; padding: 4px 10px; border-radius: 20px; font-weight: bold; font-size: 0.9rem;">⭐ {{ review.rating }} / 5</span>
+                        </div>
+                        
+                        <p style="color: #e0e0e0; line-height: 1.5; margin-bottom: 15px;">{{ review.review_text }}</p>
+                        
+                        <div style="border-top: 1px solid #2a3441; padding-top: 10px; font-size: 0.85rem; color: #a0aab2;">
+                            Diulas oleh <strong style="color: #fff;">{{ review.author.username }}</strong> pada {{ review.created_at|date:"d M Y" }}
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="community-empty-state" style="text-align: center; padding: 40px; background-color: #151a28; border-radius: 12px; border: 1px dashed #2a3441;">
+                        <p style="color: #a0aab2;">Belum ada ulasan perangkat. Jadilah yang pertama membagikan pengalamanmu!</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- KOLOM KANAN: Form Tambah Ulasan (Meniru kotak Option) -->
+        <div class="community-options-section" style="flex: 1;">
+            <div class="community-option-card" style="background-color: #1e2538; padding: 20px; border-radius: 12px; border: 1px solid #2a3441;">
+                <h3 style="color: #fff; margin-bottom: 20px; font-size: 1.1rem;">Tulis Ulasan</h3>
+                
+                {% if user.is_authenticated %}
+                    <form action="{% url 'community:create_review' %}" method="POST">
+                        {% csrf_token %}
+                        
+                        <div style="margin-bottom: 15px;">
+                            <label style="color: #a0aab2; display: block; margin-bottom: 5px; font-size: 0.9rem;">{{ form.device_name.label }}</label>
+                            <!-- Input gaya CSS manual agar mirip kolom search -->
+                            <input type="text" name="device_name" style="width: 100%; padding: 10px; border-radius: 20px; border: none; outline: none; background-color: #fff; color: #333;" placeholder="Contoh: iPhone 13" required>
+                        </div>
+                        
+                        <div style="margin-bottom: 15px;">
+                            <label style="color: #a0aab2; display: block; margin-bottom: 5px; font-size: 0.9rem;">{{ form.rating.label }}</label>
+                            <select name="rating" style="width: 100%; padding: 10px; border-radius: 20px; border: none; outline: none; background-color: #fff; color: #333;" required>
+                                {% for value, text in form.rating.field.choices %}
+                                    <option value="{{ value }}">{{ text }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <label style="color: #a0aab2; display: block; margin-bottom: 5px; font-size: 0.9rem;">{{ form.review_text.label }}</label>
+                            <textarea name="review_text" style="width: 100%; padding: 10px; border-radius: 12px; border: none; outline: none; background-color: #fff; color: #333; resize: vertical; min-height: 100px;" placeholder="Ceritakan pengalamanmu..." required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="community-btn-primary" style="width: 100%; background-color: #4cc9f0; color: #000; padding: 10px; border: none; border-radius: 20px; font-weight: bold; cursor: pointer;">Kirim Ulasan</button>
+                    </form>
+                {% else %}
+                    <div style="background-color: rgba(252, 163, 17, 0.1); border: 1px solid #fca311; padding: 15px; border-radius: 8px; text-align: center;">
+                        <p style="color: #fca311; margin: 0; font-size: 0.9rem;">Silakan <a href="/login/" style="color: #fff; font-weight: bold;">login</a> untuk memberikan ulasan.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}
