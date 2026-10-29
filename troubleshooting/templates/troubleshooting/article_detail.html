@@ -224,19 +224,19 @@
                     </p>
 
                     <div class="space-y-2.5 pt-2">
-                        <a href="/community/?q={{ article.related_forum_keyword|urlencode }}" 
+                        <a href="/community/forum?title={{ article.related_forum_keyword|urlencode }}" 
                            class="w-full flex items-center justify-between px-4 py-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl text-xs font-semibold transition">
                             <span>💬 Diskusi "{{ article.related_forum_keyword|default:'Terkait' }}" di Forum</span>
                             <span>→</span>
                         </a>
 
-                        <a href="/explorer/" 
+                        <a href="{% url 'explorer:explorer_search' %}" 
                            class="w-full flex items-center justify-between px-4 py-2.5 bg-teal-600 hover:bg-teal-500 rounded-xl text-xs font-semibold transition">
                             <span>📱 Cari Gadget Pengganti (Explorer)</span>
                             <span>→</span>
                         </a>
 
-                        <a href="/marketplace/" 
+                        <a href="{% url 'main:show_main' %}" 
                            class="w-full flex items-center justify-between px-4 py-2.5 bg-emerald-700 hover:bg-emerald-600 rounded-xl text-xs font-semibold transition">
                             <span>♻️ Jual / Cari Unit Bekas (Marketplace)</span>
                             <span>→</span>
