@@ -1,26 +1,121 @@
 {% extends 'base.html' %}
 
-{% block title %}{{item.name}}{% block title %}
-
 {% block content %}
-<div class="grid grid-cols-5 gap-6">
-    <div class="col-span-3">
-        <img src="{{item.image_url}}" class="rounded-xl">
-    </div>
-
-    <div class="col-span-2 p-6 bg-gray-100 rounded-xl">
-        <h1 class="mb-6 text-3xl">{{ item.name}}</h1>
-        <p class="text-gray-500"><strong>Price:</strong>{{item.price}}</p>
-        <p class="text-gray-500"><strong>Seller:</strong>{{item.created_by}}</p>
-
-        {% if item.description %}
-            <p class="text-gray-700">
-                <strong class="text-gray-500">Description:</strong><br>
-                {{item.description}}
+<div class="container mt-5">
+    
+    <!-- 1. BAGIAN UTAMA THREAD -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <h2 class="card-title fw-bold">{{ blog.title }}</h2>
+            <p class="text-muted mb-4">
+                Ditanyakan oleh <strong>{{ blog.author.username }}</strong> pada {{ blog.published_date_time|date:"d M Y" }}
             </p>
-        {% endif %}
+            <p class="card-text fs-5">{{ blog.content }}</p>
 
-        <a href="#" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">Contact Seller</a>
+            <!-- TOMBOL EDIT & HAPUS (Hanya muncul untuk pembuat thread) -->
+            {% if request.user == blog.author %}
+            <div class="mt-3">
+                <a href="{% url 'community:edit_thread' blog.slug %}" class="btn btn-sm btn-outline-secondary">✏️ Edit</a>
+                <a href="{% url 'community:delete_thread' blog.slug %}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Yakin ingin menghapus diskusi ini?');">🗑️ Hapus</a>
+            </div>
+            {% endif %}
+
+            <!-- TOMBOL UPVOTE (AJAX) -->
+            <div class="mt-4">
+                <input type="hidden" id="csrfToken" value="{{ csrf_token }}">
+                
+                <button id="upvoteBtn" data-id="{{ blog.id }}" 
+                        class="btn {% if request.user in blog.upvoted_by.all %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                    👍 Upvote (<span id="upvoteCount">{{ blog.upvoted_by.count }}</span>)
+                </button>
+                
+                <!-- Peringatan jika belum login -->
+                {% if not user.is_authenticated %}
+                    <small class="text-danger ms-2">Login untuk memberikan upvote.</small>
+                {% endif %}
+            </div>
+        </div>
     </div>
+
+    <!-- 2. BAGIAN FORM KOMENTAR (Hanya tampil jika sudah login) -->
+    <h4 class="mb-3">Komentar & Jawaban</h4>
+    
+    {% if user.is_authenticated %}
+        <div class="card mb-4 border-0 bg-light">
+            <div class="card-body">
+                <form action="{% url 'community:add_comment' blog.id %}" method="POST">
+                    {% csrf_token %}
+                    {{ form.content }}
+                    <button type="submit" class="btn btn-success mt-2 px-4">Kirim Jawaban</button>
+                </form>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-warning">
+            Silakan <a href="/login/" class="alert-link">login</a> untuk ikut berdiskusi dan menjawab pertanyaan ini.
+        </div>
+    {% endif %}
+
+    <!-- 3. DAFTAR KOMENTAR -->
+    {% for comment in comments %}
+        <div class="card mb-3 border-0 border-bottom rounded-0">
+            <div class="card-body px-0">
+                <strong class="text-primary">{{ comment.author.username }}</strong> 
+                <small class="text-muted ms-2">{{ comment.date_posted|date:"d M Y H:i" }}</small>
+                <p class="mt-2 mb-1">{{ comment.content }}</p>
+            </div>
+        </div>
+    {% empty %}
+        <p class="text-muted italic">Belum ada jawaban. Jadilah yang pertama membantu!</p>
+    {% endfor %}
+
 </div>
+
+<!-- 4. JAVASCRIPT UNTUK AJAX UPVOTE -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const upvoteBtn = document.getElementById('upvoteBtn');
+    
+    if (upvoteBtn) {
+        upvoteBtn.addEventListener('click', function() {
+            // Ambil ID thread dan token keamanan (CSRF)
+            const blogId = this.getAttribute('data-id');
+            const csrfToken = document.getElementById('csrfToken').value;
+
+            // Gunakan Fetch API untuk memanggil fungsi upvote di views.py secara diam-diam
+            fetch(`{% url 'community:upvote_thread' 0 %}`.replace('0', blogId), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                }
+            })
+            .then(response => {
+                // Lempar ke halaman login jika diakses oleh Guest
+                if (response.status === 401 || response.status === 403 || response.redirected) {
+                    window.location.href = "/login/";
+                    return;
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data && data.upvotes_count !== undefined) {
+                    // Update angka upvote di layar
+                    document.getElementById('upvoteCount').innerText = data.upvotes_count;
+                    
+                    // Ganti warna tombol (Biru solid jika di-upvote, garis biru jika batal upvote)
+                    if (data.upvoted) {
+                        upvoteBtn.classList.remove('btn-outline-primary');
+                        upvoteBtn.classList.add('btn-primary');
+                    } else {
+                        upvoteBtn.classList.remove('btn-primary');
+                        upvoteBtn.classList.add('btn-outline-primary');
+                    }
+                }
+            })
+            .catch(error => console.error('Error AJAX Upvote:', error));
+        });
+    }
+});
+</script>
 {% endblock %}
