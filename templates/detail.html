@@ -1,57 +1,122 @@
 {% extends 'base.html' %}
-
-{% block title %}{{ item.name }}{% endblock %}
+{% load static %}
 
 {% block content %}
-<main style="padding: 2rem;">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-[#161b22] p-6 rounded-2xl border border-gray-800">
-        
-        <div class="col-span-2 md:col-span-1 p-4 flex flex-col gap-4">
-            <h1 class="text-3xl font-bold text-white">{{ item.name }}</h1>
+<style>
+    /* CSS Khusus untuk Tombol Upvote */
+    .upvote-active { background-color: #4cc9f0 !important; color: #000 !important; border: 1px solid #4cc9f0; }
+    .upvote-inactive { background-color: transparent !important; color: #4cc9f0 !important; border: 1px solid #4cc9f0; }
+</style>
 
-            <!-- Gambar Produk -->
-            <div class="w-full h-64 bg-gray-800 rounded-xl overflow-hidden flex items-center justify-center">
-                {% if item.image %}
-                    <img src="{{ item.image }}" alt="{{ item.name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                {% else %}
-                    <span class="text-gray-400">Tidak ada foto produk</span>
-                {% endif %}
-            </div>
+<div class="main-content-community" style="padding: 20px; max-width: 900px; margin: 0 auto; color: #fff;">
+    
+    <!-- Tombol Kembali -->
+    <div style="margin-bottom: 20px;">
+        <a href="{% url 'community:show_forum' %}" style="color: #4cc9f0; text-decoration: none; font-weight: bold;">⬅ Kembali ke Forum</a>
+    </div>
 
-            <!-- Detail Harga & Penjual -->
-            <p class="text-cyan-400 text-xl font-bold">Price: Rp {{ item.price }}</p>
-            <p class="text-gray-400"><strong>Seller:</strong> {{ item.created_by.username }}</p>
-
-            {% if item.description %}
-                <p class="text-gray-300">
-                    <strong class="text-gray-400">Description:</strong><br>
-                    {{ item.description }}
-                </p>
-            {% endif %}
-
-            <!-- TOMBOL CONTACT SELLER (Pastikan bagian ini ada) -->
-            <div class="mt-4 flex flex-col gap-3">
-                {% if request.user == item.created_by %}
-                    <div class="flex gap-4">
-                        <a href="{% url 'marketplace:edit' item.pk %}" class="bg-amber-600 hover:bg-amber-500 text-white px-4 py-2 rounded-xl font-semibold transition">Edit Produk</a>
-                        <form action="{% url 'marketplace:delete' item.pk %}" method="post">
-                            {% csrf_token %}
-                            <button type="submit" class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-xl font-semibold transition">Hapus</button>
-                        </form>
-                    </div>
-                {% else %}
-                    {% if item.contact_number %}
-                        <a href="https://wa.me/{{ item.contact_number }}?text=Halo%20{{ item.created_by.username }},%20saya%20tertarik%20dengan%20produk%20{{ item.name }}%20di%20TechMate." 
-                           target="_blank" 
-                           class="inline-flex items-center justify-center gap-2 px-6 py-3 text-lg font-semibold bg-emerald-600 text-white rounded-xl hover:bg-emerald-500 transition">
-                            💬 Hubungi Penjual via WhatsApp
-                        </a>
-                    {% endif %}
-                {% endif %}
-            </div>
-
+    <!-- 1. BAGIAN UTAMA THREAD -->
+    <div style="background-color: #1e2538; padding: 30px; border-radius: 12px; border: 1px solid #2a3441; margin-bottom: 30px;">
+        <h1 style="color: #fff; margin-bottom: 10px; font-size: 2rem;">{{ blog.title }}</h1>
+        <p style="color: #a0aab2; font-size: 0.9rem; margin-bottom: 20px;">
+            Ditanyakan oleh <strong style="color: #4cc9f0;">{{ blog.author.username }}</strong> pada {{ blog.published_date_time|date:"d M Y" }}
+        </p>
+        <div style="color: #e0e0e0; font-size: 1.1rem; line-height: 1.6; margin-bottom: 30px;">
+            {{ blog.content }}
         </div>
 
+        <!-- TOMBOL EDIT & HAPUS -->
+        {% if request.user == blog.author %}
+        <div style="margin-bottom: 20px; display: flex; gap: 10px;">
+            <a href="{% url 'community:edit_thread' blog.slug %}" style="background-color: transparent; border: 1px solid #fca311; color: #fca311; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 0.9rem;">✏️ Edit</a>
+            <a href="{% url 'community:delete_thread' blog.slug %}" style="background-color: transparent; border: 1px solid #ef233c; color: #ef233c; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 0.9rem;" onclick="return confirm('Yakin ingin menghapus diskusi ini?');">🗑️ Hapus</a>
+        </div>
+        {% endif %}
+
+        <!-- TOMBOL UPVOTE (AJAX) -->
+        <div style="border-top: 1px solid #2a3441; padding-top: 20px; display: flex; align-items: center;">
+            <input type="hidden" id="csrfToken" value="{{ csrf_token }}">
+            <button id="upvoteBtn" data-id="{{ blog.id }}" 
+                    class="{% if request.user in blog.upvoted_by.all %}upvote-active{% else %}upvote-inactive{% endif %}"
+                    style="padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                👍 Upvote (<span id="upvoteCount">{{ blog.upvoted_by.count }}</span>)
+            </button>
+            
+            {% if not user.is_authenticated %}
+                <small style="color: #ef233c; margin-left: 15px;">Login untuk memberikan upvote.</small>
+            {% endif %}
+        </div>
     </div>
-</main>
+
+    <!-- 2. BAGIAN FORM KOMENTAR -->
+    <h3 style="color: #fff; margin-bottom: 20px;">Komentar & Jawaban ({{ comments.count }})</h3>
+    
+    {% if user.is_authenticated %}
+        <div style="background-color: #1e2538; padding: 20px; border-radius: 12px; border: 1px solid #2a3441; margin-bottom: 30px;">
+            <form action="{% url 'community:add_comment' blog.id %}" method="POST">
+                {% csrf_token %}
+                <textarea name="content" style="width: 100%; padding: 15px; border-radius: 8px; border: 1px solid #2a3441; background-color: #151a28; color: #fff; outline: none; resize: vertical; min-height: 100px; margin-bottom: 15px;" placeholder="Tulis balasan atau komentarmu di sini..." required></textarea>
+                <button type="submit" style="background-color: #4cc9f0; color: #000; padding: 10px 20px; border: none; border-radius: 20px; font-weight: bold; cursor: pointer;">Kirim Jawaban</button>
+            </form>
+        </div>
+    {% else %}
+        <div style="background-color: rgba(252, 163, 17, 0.1); border: 1px solid #fca311; padding: 15px; border-radius: 8px; margin-bottom: 30px;">
+            Silakan <a href="/login/" style="color: #fca311; font-weight: bold;">login</a> untuk ikut berdiskusi.
+        </div>
+    {% endif %}
+
+    <!-- 3. DAFTAR KOMENTAR -->
+    <div style="display: flex; flex-direction: column; gap: 15px;">
+        {% for comment in comments %}
+            <div style="background-color: #151a28; padding: 20px; border-radius: 12px; border: 1px solid #2a3441;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <strong style="color: #4cc9f0;">{{ comment.author.username }}</strong>
+                    <small style="color: #a0aab2;">{{ comment.date_posted|date:"d M Y H:i" }}</small>
+                </div>
+                <p style="color: #e0e0e0; margin: 0; line-height: 1.5;">{{ comment.content }}</p>
+            </div>
+        {% empty %}
+            <div style="text-align: center; padding: 30px; background-color: #151a28; border-radius: 12px; border: 1px dashed #2a3441; color: #a0aab2;">
+                Belum ada jawaban. Jadilah yang pertama membantu!
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- 4. JAVASCRIPT AJAX -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const upvoteBtn = document.getElementById('upvoteBtn');
+    if (upvoteBtn) {
+        upvoteBtn.addEventListener('click', function() {
+            const blogId = this.getAttribute('data-id');
+            const csrfToken = document.getElementById('csrfToken').value;
+
+            fetch(`{% url 'community:upvote_thread' 0 %}`.replace('0', blogId), {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrfToken }
+            })
+            .then(response => {
+                if (response.status === 401 || response.status === 403 || response.redirected) {
+                    window.location.href = "/login/"; return;
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data && data.upvotes_count !== undefined) {
+                    document.getElementById('upvoteCount').innerText = data.upvotes_count;
+                    if (data.upvoted) {
+                        upvoteBtn.classList.remove('upvote-inactive');
+                        upvoteBtn.classList.add('upvote-active');
+                    } else {
+                        upvoteBtn.classList.remove('upvote-active');
+                        upvoteBtn.classList.add('upvote-inactive');
+                    }
+                }
+            })
+            .catch(error => console.error('Error AJAX Upvote:', error));
+        });
+    }
+});
+</script>
 {% endblock %}
