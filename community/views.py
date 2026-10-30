@@ -19,11 +19,17 @@ def forum_detail(request, slug):
     return render(request, 'detail.html', {'blog': blog, 'comments': comments, 'form': form})
 
 def review_list(request):
-    """Menampilkan daftar rating & ulasan gadget."""
-    reviews = Review.objects.all().order_by('-created_at')
+    """Menampilkan daftar rating & ulasan gadget dengan fitur pencarian."""
+    query = request.GET.get('q', '') # Menangkap kata kunci dari URL
+    
+    if query:
+        # Mencari ulasan yang nama perangkatnya mengandung kata kunci
+        reviews = Review.objects.filter(device_name__icontains=query).order_by('-created_at')
+    else:
+        reviews = Review.objects.all().order_by('-created_at')
+        
     form = ReviewForm()
-    return render(request, 'reviews.html', {'reviews': reviews, 'form': form})
-
+    return render(request, 'reviews.html', {'reviews': reviews, 'form': form, 'query': query})
 
 # 2. FITUR CREATE/UPDATE (Wajib Login)
 
@@ -36,7 +42,7 @@ def create_thread(request):
             blog = form.save(commit=False)
             blog.author = request.user
             blog.save()
-            return redirect('forum_detail', slug=blog.slug)
+            return redirect('community:forum_detail', slug=blog.slug)
     else:
         form = BlogForm()
     return render(request, 'create_thread.html', {'form': form})
@@ -50,8 +56,8 @@ def create_review(request):
             review = form.save(commit=False)
             review.author = request.user
             review.save()
-            return redirect('review_list')
-    return redirect('review_list')
+            return redirect('community:review_list')
+    return redirect('community:review_list')
 
 @login_required(login_url='/login/')
 def add_comment(request, blog_id):
@@ -70,11 +76,11 @@ def add_comment(request, blog_id):
                 comment.parent = get_object_or_404(Comment, id=parent_id)
                 
             comment.save()
-            return redirect('forum_detail', slug=blog.slug)
-    return redirect('forum_detail', slug=blog.slug)
+            return redirect('community:forum_detail', slug=blog.slug)
+    return redirect('community:forum_detail', slug=blog.slug)
 
 
-# 3. FITUR INTERAKTIF (AJAX)
+# 3. FITUR INTERAKTIF (AJAX) & CRUD LANJUTAN
 
 @login_required(login_url='/login/')
 def upvote_thread(request, blog_id):
@@ -101,14 +107,14 @@ def edit_thread(request, slug):
     
     # Keamanan: Tolak jika yang mencoba edit bukan pembuat aslinya
     if request.user != blog.author:
-        return redirect('forum_detail', slug=slug)
+        return redirect('community:forum_detail', slug=slug)
         
     if request.method == 'POST':
         # instance=blog artinya form ini akan berisi data lama yang mau diedit
         form = BlogForm(request.POST, instance=blog)
         if form.is_valid():
             form.save()
-            return redirect('forum_detail', slug=blog.slug)
+            return redirect('community:forum_detail', slug=blog.slug)
     else:
         form = BlogForm(instance=blog)
         
@@ -120,7 +126,3 @@ def delete_thread(request, slug):
     blog = get_object_or_404(Blog, slug=slug)
     
     # Keamanan: Hanya hapus jika user yang login adalah pembuatnya
-    if request.user == blog.author:
-        blog.delete()
-        
-    return redirect('show_forum')
