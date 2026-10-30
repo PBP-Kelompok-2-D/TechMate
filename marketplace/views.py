@@ -28,7 +28,7 @@ def detail(request, pk):
     item = get_object_or_404(Item, pk=pk)
     related_items = Item.objects.filter(category=item.category, is_sold=False).exclude(pk=pk)[0:3]
 
-    return render(request, 'detail.html', {
+    return render(request, 'detail_item.html', {
         'item' : item,
         'related_item' : related_items,
     })
@@ -64,31 +64,39 @@ def delete(request, pk):
 
 @login_required
 def edit(request, pk):
-    # Menggunakan get_object_or_404 biasa, lalu dicek kepemilikannya
     item = get_object_or_404(Item, pk=pk)
 
     if item.created_by != request.user:
-        return redirect('marketplace:show_market') # Redirect jika bukan pemilik produk
+        return redirect('marketplace:show_market')
 
     if request.method == "POST":
         form = EditItemForm(request.POST, request.FILES, instance=item)
-
         if form.is_valid():
             form.save()
             return redirect('marketplace:detail', pk=item.id)
     else:
         form = EditItemForm(instance=item)
 
-    return render(request, 'forms.html', {
+    return render(request, 'form.html', {
         'form': form,
         'title': 'Edit item',
     })
+
+@login_required
+def delete(request, pk):
+    item = get_object_or_404(Item, pk=pk)
+
+    if item.created_by == request.user:
+        item.delete()
+    
+    # WAJIB menggunakan redirect agar kembali ke halaman market dan tidak merusak tampilan
+    return redirect('marketplace:show_market')
 
 def new_conversation(request, item_pk):
     item = get_object_or_404(Item, pk=item_pk)
 
     if item.created_by == request.user:
-        return redirect('templates/index.html')
+        return redirect('index.html')
 
     conversations = Conversation.objects.filter(item=item).filter(members__in=[request.user.id])
 
