@@ -1,50 +1,59 @@
 {% extends 'base.html' %}
 
-{% block meta %}
-<title>Market - {{ name }}</title>
-{% endblock meta %}
+{% block title %}Marketplace - TechMate{% endblock %}
 
 {% block content %}
-<main>
-
-
-
-    <!-- coba coba rekomendasi -->
-    <section class="section" id="marketplace">
-        <div class="section-head">
-            <span class="eyebrow">Marketplace</span>
-            <h2 class="section-title">Gadget seken rekomendasi</h2>
-            <p class="section-desc">Beli gadget yang mungkin anda butuhkan.</p>
+<main class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Header Bagian Atas & Tombol Tambah Produk -->
+    <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+        <div>
+            <h1 class="text-3xl font-bold text-white">TechMate Marketplace</h1>
+            <p class="text-gray-400 text-sm mt-1">Temukan dan jual perangkat teknologi bekas berkualitas di sini.</p>
         </div>
-
-        <!-- Tombol Tambah Produk di bawah deskripsi -->
-            {% if request.user.is_authenticated %}
-            <div style="margin-top: 1rem;">
-                <a href="{% url 'marketplace:new' %}" class="btn btn-primary" style="text-decoration: none; display: inline-block; background-color: #0284c7; color: white; padding: 0.6rem 1.2rem; border-radius: 0.75rem; font-weight: 600;">
-                    + Tambah Produk
-                </a>
-            </div>
-            {% endif %}
+        <div>
+            <a href="{% url 'marketplace:new' %}" class="inline-flex items-center gap-2 bg-cyan-600 hover:bg-cyan-500 text-white font-semibold px-6 py-3 rounded-xl transition shadow-lg">
+                + Tambah Produk
+            </a>
         </div>
-        
-        <div class="product-grid">
+    </div>
+
+    <!-- Bagian Filter Kategori (Opsional jika ingin dipakai) -->
+    <div class="flex gap-2 overflow-x-auto pb-4 mb-6">
+        <a href="{% url 'marketplace:show_market' %}" class="px-4 py-2 rounded-xl bg-gray-800 text-white hover:bg-gray-700 text-sm font-medium transition">Semua</a>
+        <a href="{% url 'marketplace:show_market' %}?category=smartphone" class="px-4 py-2 rounded-xl bg-gray-800 text-gray-300 hover:bg-gray-700 text-sm font-medium transition">Smartphone</a>
+        <a href="{% url 'marketplace:show_market' %}?category=laptop" class="px-4 py-2 rounded-xl bg-gray-800 text-gray-300 hover:bg-gray-700 text-sm font-medium transition">Laptop</a>
+        <a href="{% url 'marketplace:show_market' %}?category=tablet" class="px-4 py-2 rounded-xl bg-gray-800 text-gray-300 hover:bg-gray-700 text-sm font-medium transition">Tablet</a>
+    </div>
+
+    <!-- Grid Daftar Produk -->
+    {% if items %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {% for item in items %}
-            <article class="product-card">
-                <div class="placeholder">
-                    <img src="{item.image}" alt="">
-                </div>
-                <div class="product-info">
-                    <span class="badge">Mulus</span>
-                    <h3>{{ item.name }}</h3>
-                    <p class="product-meta">Baterai 90% · COD Depok</p>
-                    <p class="product-price">Rp { item.price }</p>
-                </div>
-            </article>
-
-            {% empty %}
-            <div> kosong </div>
+                <!-- Kartu Produk yang Bisa Dipencet (Clickable Card) -->
+                <a href="{% url 'marketplace:detail' item.pk %}" class="bg-[#161b22] border border-gray-800 rounded-2xl overflow-hidden hover:border-cyan-500 transition block shadow-md group">
+                    <div class="h-48 bg-gray-900 overflow-hidden">
+                        {% if item.image %}
+                            <img src="{{ item.image }}" alt="{{ item.name }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                        {% else %}
+                            <div class="w-full h-full flex items-center justify-center text-gray-600 text-sm">Tidak ada foto</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="p-5 flex flex-col gap-2">
+                        <span class="text-xs uppercase tracking-wider text-cyan-400 font-semibold">{{ item.category }}</span>
+                        <h2 class="text-lg font-bold text-white truncate">{{ item.name }}</h2>
+                        <p class="text-cyan-300 font-bold">Rp {{ item.price }}</p>
+                        <p class="text-gray-400 text-xs mt-1">Penjual: {{ item.created_by.username }}</p>
+                    </div>
+                </a>
             {% endfor %}
         </div>
-    </section>
+    {% else %}
+        <!-- Tampilan Jika Belum Ada Produk -->
+        <div class="text-center py-16 bg-[#161b22] border border-gray-800 rounded-2xl">
+            <p class="text-gray-400 text-lg mb-4">Belum ada produk yang tersedia di marketplace saat ini.</p>
+            <a href="{% url 'marketplace:new' %}" class="text-cyan-400 hover:underline font-semibold">Jadilah yang pertama menjual produk!</a>
+        </div>
+    {% endif %}
 </main>
-{% endblock content %}
+{% endblock %}
