@@ -70,3 +70,7 @@ API yang akan dipakai dalam aplikasi ini, tapi mungkin akan bertambah:
 - **Muhammad Naufal Rizki Fadhlurrahman** - 2506623490
 - **Rasya Al Hawari** - 2506534176
 - **Vebian Francois Ariftya Manurung** - 2506543363
+
+## AI
+- **Vebian Francois Ariftya Manurung**
+  Saya memakai AI dalam beberapa pengerjaan modul saya, terlebih membuat javascript, css, dan html. Salah satunya seperti mengirimkan tangkapan layar dari figma untuk di dbuat code html + css, lalu setelah itu saya otak-atik agar logikanya sesuai pakai {{}} ataupun {%%}. Kebanyakan saya memakai dan meniru contoh dari tutorial dan tutorial youtube
