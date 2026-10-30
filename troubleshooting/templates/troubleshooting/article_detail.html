@@ -1,0 +1,321 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<script src="https://cdn.tailwindcss.com"></script>
+
+<div class="w-full text-slate-100 py-4 px-2 sm:px-6">
+    <div class="max-w-6xl mx-auto">
+
+        <!-- Navigasi Kembali -->
+        <div class="mb-6">
+            <a href="{% url 'troubleshooting:article_list' %}" class="inline-flex items-center text-sm font-medium text-slate-400 hover:text-teal-400 transition">
+                ← Kembali ke Direktori Troubleshooting
+            </a>
+        </div>
+
+        <!-- Header Artikel -->
+        <div class="bg-slate-900/90 rounded-2xl p-6 sm:p-8 shadow-md border border-slate-800 mb-8">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <div class="flex items-center gap-2 flex-wrap">
+                    <span class="px-3 py-1 bg-slate-800 text-slate-200 border border-slate-700 rounded-lg text-xs font-bold uppercase">
+                        {{ article.get_device_type_display }}
+                    </span>
+                    <span class="px-3 py-1 bg-teal-950 text-teal-300 border border-teal-800/60 rounded-lg text-xs font-semibold">
+                        {{ article.get_category_display }}
+                    </span>
+                    <span class="px-3 py-1 bg-indigo-950 text-indigo-300 border border-indigo-800/60 rounded-lg text-xs font-semibold">
+                        Tingkat Kesulitan: {{ article.get_difficulty_display }}
+                    </span>
+                </div>
+
+                {% if user.is_authenticated %}
+                <button id="btn-detail-bookmark" type="button" onclick="toggleDetailBookmark({{ article.id }})"
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border text-sm font-medium transition {% if is_bookmarked %}bg-amber-500/20 border-amber-500/50 text-amber-300{% else %}bg-slate-800 border-slate-700 text-slate-200 hover:bg-slate-700{% endif %}">
+                    <span id="bookmark-icon">{% if is_bookmarked %}🔖 Tersimpan di Bookmark{% else %}🏷️ Simpan Panduan{% endif %}</span>
+                </button>
+                {% endif %}
+            </div>
+
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-white mt-4">
+                {{ article.title }}
+            </h1>
+            <p class="text-xs text-slate-400 mt-2">
+                Terakhir diperbarui: {{ article.updated_at|date:"d M Y" }}
+            </p>
+        </div>
+
+        <!-- Layout 2 Kolom -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+            <!-- Kolom Kiri (2/3): Diagnosis, Langkah Perbaikan, & Pengalaman Komunitas -->
+            <div class="lg:col-span-2 space-y-8">
+                
+                <!-- Gejala & Penyebab -->
+                <div class="bg-slate-900/90 rounded-2xl p-6 sm:p-8 shadow-md border border-slate-800 space-y-6">
+                    <div>
+                        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                            🔍 Gejala Kerusakan Umum
+                        </h2>
+                        <div class="mt-2 text-slate-300 text-sm leading-relaxed whitespace-pre-line bg-slate-800/70 p-4 rounded-xl border border-slate-700/70">{{ article.symptoms }}</div>
+                    </div>
+
+                    <div>
+                        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                            ⚙️ Penyebab Utama
+                        </h2>
+                        <div class="mt-2 text-slate-300 text-sm leading-relaxed whitespace-pre-line">{{ article.causes }}</div>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-800">
+                        <h2 class="text-lg font-bold text-teal-400 flex items-center gap-2">
+                            🛠️ Langkah Penanganan & Perbaikan Mandiri
+                        </h2>
+                        <div class="mt-3 text-slate-200 text-sm leading-relaxed whitespace-pre-line bg-teal-950/30 p-5 rounded-xl border border-teal-800/50">{{ article.step_by_step_solution }}</div>
+                    </div>
+                </div>
+
+                <!-- Catatan Pengalaman Servis & Biaya Nyata -->
+                <div class="bg-slate-900/90 rounded-2xl p-6 sm:p-8 shadow-md border border-slate-800">
+                    <div class="mb-6">
+                        <h2 class="text-xl font-bold text-white">💬 Catatan Servis & Biaya Nyata Komunitas</h2>
+                        <p class="text-xs text-slate-400 mt-1">Bantu pengguna lain dengan membagikan pengalaman dan biaya servis yang kamu keluarkan.</p>
+                    </div>
+
+                    {% if user.is_authenticated %}
+                    <form id="feedback-form" class="bg-slate-800/70 p-5 rounded-xl border border-slate-700 mb-8 space-y-4 text-slate-900">
+                        {% csrf_token %}
+                        <h3 class="text-sm font-bold text-white">
+                            {% if user_feedback %}Perbarui Catatan Pengalamanmu{% else %}Bagikan Pengalaman Perbaikanmu{% endif %}
+                        </h3>
+
+                        <div id="form-alert" class="hidden p-3 rounded-lg text-xs font-medium"></div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Apakah Masalah Teratasi?</label>
+                                {{ form.is_solved }}
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Biaya Nyata yang Dikeluarkan (Rp)</label>
+                                {{ form.actual_repair_cost }}
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Tips Tambahan / Lokasi Servis / Catatan</label>
+                            {{ form.comment }}
+                        </div>
+
+                        <div class="flex items-center justify-between pt-2">
+                            <button type="submit" class="px-5 py-2.5 bg-teal-600 hover:bg-teal-500 text-white text-xs font-semibold rounded-lg transition shadow-sm">
+                                Simpan Catatan Servis
+                            </button>
+
+                            {% if user_feedback %}
+                            <button type="button" onclick="deleteFeedback({{ user_feedback.id }})"
+                                class="text-xs text-rose-400 hover:text-rose-300 font-semibold underline">
+                                Hapus Catatan Saya
+                            </button>
+                            {% endif %}
+                        </div>
+                    </form>
+                    {% else %}
+                    <div class="bg-amber-950/40 border border-amber-700/50 rounded-xl p-4 mb-8 flex items-center justify-between gap-4">
+                        <p class="text-xs text-amber-200">
+                            Pernah mengalami masalah ini? Login untuk membagikan biaya servis nyata dan menyimpan panduan ini.
+                        </p>
+                        <a href="/login/" class="px-3.5 py-1.5 bg-amber-600 text-white text-xs font-semibold rounded-lg hover:bg-amber-500 shrink-0">
+                            Login
+                        </a>
+                    </div>
+                    {% endif %}
+
+                    <div id="feedback-list" class="space-y-4">
+                        {% for fb in feedbacks %}
+                        <div class="p-4 rounded-xl border border-slate-800 bg-slate-800/50">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="flex items-center gap-2">
+                                    <span class="font-bold text-sm text-white">{{ fb.user.username }}</span>
+                                    {% if fb.is_solved %}
+                                        <span class="px-2 py-0.5 bg-emerald-950 text-emerald-300 border border-emerald-700/50 rounded text-xs font-medium">✅ Berhasil Teratasi</span>
+                                    {% else %}
+                                        <span class="px-2 py-0.5 bg-amber-950 text-amber-300 border border-amber-700/50 rounded text-xs font-medium">⚠️ Butuh Teknisi Lanjutan</span>
+                                    {% endif %}
+                                </div>
+                                <span class="text-xs text-slate-400">{{ fb.created_at|date:"d M Y" }}</span>
+                            </div>
+                            <p class="text-sm text-slate-300">{{ fb.comment }}</p>
+                            {% if fb.actual_repair_cost is not None %}
+                            <div class="mt-2 text-xs font-semibold text-teal-400">
+                                💰 Biaya servis yang dikeluarkan: Rp {{ fb.actual_repair_cost }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% empty %}
+                        <p class="text-sm text-slate-400 text-center py-6">
+                            Belum ada catatan pengalaman servis dari komunitas. Jadilah yang pertama berbagi!
+                        </p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kolom Kanan (1/3): Matriks Fix vs Replace & Smart Linker -->
+            <div class="space-y-6">
+                
+                <div class="bg-slate-900/90 rounded-2xl p-6 shadow-md border border-slate-800">
+                    <h3 class="text-base font-bold text-white mb-4">
+                        ⚖️ Analisis Servis vs Tukar Tambah
+                    </h3>
+
+                    <div class="mb-4">
+                        <span class="text-xs text-slate-400 block mb-1">Status Rekomendasi:</span>
+                        {% if article.recommendation == 'DIY' %}
+                            <div class="p-3 rounded-xl bg-emerald-950/60 border border-emerald-700/60 text-emerald-300 font-bold text-sm">
+                                🟢 {{ article.get_recommendation_display }}
+                            </div>
+                        {% elif article.recommendation == 'TECHNICIAN' %}
+                            <div class="p-3 rounded-xl bg-amber-950/60 border border-amber-700/60 text-amber-300 font-bold text-sm">
+                                🟡 {{ article.get_recommendation_display }}
+                            </div>
+                        {% else %}
+                            <div class="p-3 rounded-xl bg-rose-950/60 border border-rose-700/60 text-rose-300 font-bold text-sm">
+                                🔴 {{ article.get_recommendation_display }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="space-y-3 text-sm border-t border-b border-slate-800 py-4 my-4">
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">Estimasi Standar:</span>
+                            <span class="font-bold text-white">
+                                {% if article.estimated_cost_max == 0 %}Gratis{% else %}Rp {{ article.estimated_cost_min }} - {{ article.estimated_cost_max }}{% endif %}
+                            </span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">Rata-rata Biaya Komunitas:</span>
+                            <span class="font-bold text-teal-400">
+                                {% if avg_actual_cost %}Rp {{ avg_actual_cost }}{% else %}Belum ada data{% endif %}
+                            </span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">Tingkat Keberhasilan:</span>
+                            <span class="font-bold text-emerald-400">{{ success_rate }}% ({{ total_reviews }} ulasan)</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-rose-400 mb-1">
+                            Kapan Harus Tukar Tambah / Ganti?
+                        </h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            {{ article.when_to_replace }}
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Kartu Smart Linker -->
+                <div class="bg-gradient-to-b from-slate-900 to-teal-950/50 text-white rounded-2xl p-6 shadow-md border border-teal-800/40 space-y-4">
+                    <h3 class="text-base font-bold flex items-center gap-2">
+                        🔗 Tautan Cerdas Ekosistem TechMate
+                    </h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Masih terkendala dengan gejala <strong>{{ article.related_forum_keyword|default:article.title }}</strong> atau berencana mengganti perangkat?
+                    </p>
+
+                    <div class="space-y-2.5 pt-2">
+                        <a href="/community/forum?title={{ article.related_forum_keyword|urlencode }}" 
+                           class="w-full flex items-center justify-between px-4 py-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl text-xs font-semibold transition">
+                            <span>💬 Diskusi "{{ article.related_forum_keyword|default:'Terkait' }}" di Forum</span>
+                            <span>→</span>
+                        </a>
+
+                        <a href="{% url 'explorer:explorer_search' %}" 
+                           class="w-full flex items-center justify-between px-4 py-2.5 bg-teal-600 hover:bg-teal-500 rounded-xl text-xs font-semibold transition">
+                            <span>📱 Cari Gadget Pengganti (Explorer)</span>
+                            <span>→</span>
+                        </a>
+
+                        <a href="{% url 'main:show_main' %}" 
+                           class="w-full flex items-center justify-between px-4 py-2.5 bg-emerald-700 hover:bg-emerald-600 rounded-xl text-xs font-semibold transition">
+                            <span>♻️ Jual / Cari Unit Bekas (Marketplace)</span>
+                            <span>→</span>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const csrfToken = "{{ csrf_token }}";
+
+    async function toggleDetailBookmark(articleId) {
+        const btn = document.getElementById('btn-detail-bookmark');
+        const iconSpan = document.getElementById('bookmark-icon');
+        try {
+            const response = await fetch(`/troubleshooting/api/bookmark/${articleId}/`, {
+                method: 'POST',
+                headers: { 'X-CSRFToken': csrfToken }
+            });
+            const data = await response.json();
+            if (data.is_bookmarked) {
+                btn.className = "inline-flex items-center gap-2 px-4 py-2 rounded-xl border text-sm font-medium transition bg-amber-500/20 border-amber-500/50 text-amber-300";
+                iconSpan.textContent = "🔖 Tersimpan di Bookmark";
+            } else {
+                btn.className = "inline-flex items-center gap-2 px-4 py-2 rounded-xl border text-sm font-medium transition bg-slate-800 border-slate-700 text-slate-200 hover:bg-slate-700";
+                iconSpan.textContent = "🏷️ Simpan Panduan";
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    const feedbackForm = document.getElementById('feedback-form');
+    if (feedbackForm) {
+        feedbackForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const alertBox = document.getElementById('form-alert');
+            const formData = new FormData(feedbackForm);
+
+            try {
+                const response = await fetch("{% url 'troubleshooting:submit_feedback_ajax' article.id %}", {
+                    method: 'POST',
+                    headers: { 'X-CSRFToken': csrfToken },
+                    body: formData
+                });
+                const data = await response.json();
+
+                if (response.ok && data.status === 'success') {
+                    alertBox.className = "p-3 rounded-lg text-xs font-medium bg-emerald-950 text-emerald-300 border border-emerald-700 block";
+                    alertBox.textContent = data.message + " Memuat ulang statistik...";
+                    setTimeout(() => window.location.reload(), 800);
+                } else {
+                    alertBox.className = "p-3 rounded-lg text-xs font-medium bg-rose-950 text-rose-300 border border-rose-700 block";
+                    alertBox.textContent = "Pastikan semua kolom terisi dengan benar.";
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        });
+    }
+
+    async function deleteFeedback(feedbackId) {
+        if (!confirm("Hapus catatan pengalaman servis kamu?")) return;
+        try {
+            const response = await fetch(`/troubleshooting/api/feedback/delete/${feedbackId}/`, {
+                method: 'POST',
+                headers: { 'X-CSRFToken': csrfToken }
+            });
+            const data = await response.json();
+            if (data.status === 'deleted') {
+                window.location.reload();
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    }
+</script>
+{% endblock %}

@@ -10,10 +10,6 @@
             <div class="auth-box">
                 <h1>Login</h1>
 
-                {% for message in messages %}
-                <p class="form-message">{{ message }}</p>
-                {% endfor %}
-                
                 <form method="post" action="{% url 'main:login' %}" class="auth-form">
                 {% csrf_token %}
                 

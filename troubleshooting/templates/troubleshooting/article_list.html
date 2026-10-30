@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+    .tm-container { max-width: 1200px; margin: 0 auto; padding: 24px 16px; color: #f1f5f9; font-family: sans-serif; }
+    .tm-hero { background: linear-gradient(135deg, rgba(19,78,74,0.85), rgba(15,23,42,0.95)); border: 1px solid rgba(20,184,166,0.3); border-radius: 16px; padding: 28px; margin-bottom: 24px; }
+    .tm-filter-box { background: rgba(15,23,42,0.9); border: 1px solid #334155; border-radius: 16px; padding: 20px; margin-bottom: 24px; }
+    .tm-filter-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .tm-input, .tm-select { width: 100%; background: #1e293b; color: #f8fafc; border: 1px solid #475569; border-radius: 10px; padding: 10px 12px; font-size: 14px; box-sizing: border-box; }
+    .tm-cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+    .tm-card { background: rgba(15,23,42,0.92); border: 1px solid #1e293b; border-radius: 16px; padding: 22px; display: flex; flex-direction: column; justify-content: space-between; transition: 0.2s; }
+    .tm-card:hover { border-color: rgba(20,184,166,0.5); }
+</style>
+
+<div class="tm-container">
+    <!-- Header -->
+    <div class="tm-hero">
+        <span style="background: rgba(20,184,166,0.2); color: #5eead4; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; text-transform: uppercase;">Fix First, Prevent E-Waste</span>
+        <h1 style="font-size: 28px; font-weight: 800; margin: 12px 0 8px 0; color: #ffffff;">Direktori Diagnosis & Perbaikan Mandiri</h1>
+        <p style="color: #cbd5e1; font-size: 14px; max-width: 720px; line-height: 1.6; margin: 0;">Temukan solusi gejala kerusakan HP, Laptop, dan Tablet. Ketahui apakah perangkatmu bisa diperbaiki sendiri (DIY), perlu dibawa ke teknisi, atau memang sudah saatnya tukar tambah.</p>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="tm-filter-box">
+        <div class="tm-filter-grid">
+            <input type="text" id="filter-q" placeholder="🔍 Cari gejala..." class="tm-input">
+            <select id="filter-device" class="tm-select">
+                <option value="">Semua Perangkat</option>
+                {% for code, label in device_choices %} <option value="{{ code }}">{{ label }}</option> {% endfor %}
+            </select>
+            <select id="filter-category" class="tm-select">
+                <option value="">Semua Kategori Kerusakan</option>
+                {% for code, label in category_choices %} <option value="{{ code }}">{{ label }}</option> {% endfor %}
+            </select>
+            <select id="filter-recommendation" class="tm-select">
+                <option value="">Semua Rekomendasi</option>
+                {% for code, label in recommendation_choices %} <option value="{{ code }}">{{ label }}</option> {% endfor %}
+            </select>
+        </div>
+        <div style="margin-top: 16px; display: flex; justify-content: space-between;">
+            <div style="color: #94a3b8;">Menampilkan <strong id="article-count">{{ articles|length }}</strong> panduan</div>
+            {% if user.is_authenticated %}
+            <label><input type="checkbox" id="filter-bookmarked"> 🔖 Bookmark Saya</label>
+            {% endif %}
+            <button id="btn-reset-filter" style="background: none; border: none; color: #94a3b8; cursor: pointer; text-decoration: underline;">Reset Filter</button>
+        </div>
+    </div>
+
+    <!-- Grid Layout Awal (Django Load) -->
+    <div id="articles-grid" class="tm-cards-grid">
+        {% for art in articles %}
+        <div class="tm-card">
+            <div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                    <div style="display: flex; gap: 6px;">
+                        <span style="padding: 4px 10px; background: #1e293b; border-radius: 6px; font-size: 12px; font-weight:bold;">{{ art.get_device_type_display }}</span>
+                        <span style="padding: 4px 10px; background: rgba(19,78,74,0.5); color: #5eead4; border: 1px solid rgba(20,184,166,0.3); border-radius: 6px; font-size: 12px;">{{ art.get_category_display }}</span>
+                    </div>
+                    {% if user.is_authenticated %}
+                    <button type="button" onclick="toggleBookmark({{ art.id }}, this)" style="background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 6px 8px; cursor: pointer; color: {% if art.id in bookmarked_ids %}#fbbf24{% else %}#94a3b8{% endif %};">🔖</button>
+                    {% endif %}
+                </div>
+                <a href="{% url 'troubleshooting:article_detail' art.slug %}" style="text-decoration: none; color: white;">
+                    <h2 style="font-size: 18px; font-weight: bold; margin: 0 0 8px 0;">{{ art.title }}</h2>
+                </a>
+                <p style="font-size: 13px; color: #94a3b8;">{{ art.symptoms|truncatechars:100 }}</p>
+            </div>
+            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #1e293b;">
+                <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 8px;">
+                    <span style="color: #94a3b8;">Rekomendasi Asli:</span>
+                    {% if art.recommendation == 'DIY' %}
+                        <span style="color: #6ee7b7; font-weight: 600;">🟢 {{ art.get_recommendation_display }}</span>
+                    {% elif art.recommendation == 'TECHNICIAN' %}
+                        <span style="color: #fcd34d; font-weight: 600;">🟡 {{ art.get_recommendation_display }}</span>
+                    {% else %}
+                        <span style="color: #fda4af; font-weight: 600;">🔴 {{ art.get_recommendation_display }}</span>
+                    {% endif %}
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 12px; margin-top: 10px;">
+                    <span style="color: #94a3b8;">Estimasi Biaya:</span>
+                    <span style="font-weight: bold; color: #e2e8f0;">
+                        {% if art.estimated_cost_max == 0 %}Gratis (Rp 0){% else %}Rp {{ art.estimated_cost_min }} - Rp {{ art.estimated_cost_max }}{% endif %}
+                    </span>
+                </div>
+                <a href="{% url 'troubleshooting:article_detail' art.slug %}" class="block w-full text-center bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-4 rounded-xl transition duration-200 mt-5 shadow-lg shadow-emerald-500/30">
+                    Baca Panduan Diagnosis ➔
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    const csrfToken = "{{ csrf_token }}";
+    const isAuthenticated = {{ user.is_authenticated|yesno:"true,false" }};
+    const inputQ = document.getElementById('filter-q'), selectDevice = document.getElementById('filter-device');
+    const selectCategory = document.getElementById('filter-category'), selectRec = document.getElementById('filter-recommendation');
+    const checkBookmarked = document.getElementById('filter-bookmarked'), gridContainer = document.getElementById('articles-grid');
+
+    function formatRupiah(num) { return new Intl.NumberFormat('id-ID').format(num); }
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+
+    // Peringatan Dinamis
+    function getRecommendationWarning(userFilter, realCode) {
+        if (!userFilter) return '';
+        if (userFilter === 'DIY' && realCode !== 'DIY') {
+            return `<div style="margin-top: 10px; padding: 10px; background: rgba(225, 29, 72, 0.15); border: 1px solid #be123c; border-radius: 8px; font-size: 12px; color: #fda4af; font-weight: 500;">⚠️ <strong>Perangkat ini tidak disarankan untuk Servis Mandiri (DIY).</strong> Risiko kerusakan permanen tinggi. Kami sangat menyarankan perbaikan ini dilakukan oleh teknisi profesional.</div>`;
+        }
+        if (userFilter === 'TECHNICIAN' && realCode === 'DIY') {
+            return `<div style="margin-top: 10px; padding: 10px; background: rgba(14, 165, 233, 0.15); border: 1px solid #0284c7; border-radius: 8px; font-size: 12px; color: #7dd3fc; font-weight: 500;">💡 <strong>Hemat Biaya!</strong> Kamu mencari teknisi, namun masalah ini sebenarnya sangat mudah diselesaikan sendiri. Cek panduan DIY kami di bawah.</div>`;
+        }
+        if (userFilter === 'REPLACE' && realCode !== 'REPLACE') {
+            return `<div style="margin-top: 10px; padding: 10px; background: rgba(245, 158, 11, 0.15); border: 1px solid #b45309; border-radius: 8px; font-size: 12px; color: #fcd34d; font-weight: 500;">♻️ <strong>Tunda Ganti Baru!</strong> Perangkat ini masih sangat layak dan murah untuk diperbaiki. Mari kurangi limbah elektronik dengan opsi servis.</div>`;
+        }
+        return '';
+    }
+
+    async function fetchFilteredArticles() {
+        const params = new URLSearchParams({
+            q: inputQ.value, device: selectDevice.value, category: selectCategory.value, bookmarked: checkBookmarked ? checkBookmarked.checked : false
+        });
+        try {
+            const res = await fetch(`{% url 'troubleshooting:filter_articles_ajax' %}?${params.toString()}`);
+            const data = await res.json();
+            document.getElementById('article-count').textContent = data.count;
+
+            if (data.articles.length === 0) {
+                gridContainer.innerHTML = `<div style="grid-column: 1 / -1; background: rgba(15,23,42,0.9); border: 1px dashed #334155; border-radius: 16px; padding: 40px; text-align: center;"><p style="color: #94a3b8; margin: 0;">Tidak ada panduan yang cocok dengan filter pencarianmu.</p></div>`;
+                return;
+            }
+            
+            gridContainer.innerHTML = data.articles.map(art => {
+                const costText = art.estimated_cost_max === 0 ? 'Gratis (Rp 0)' : `Rp ${formatRupiah(art.estimated_cost_min)} - Rp ${formatRupiah(art.estimated_cost_max)}`;
+                let recBadge = '';
+                if (art.recommendation_code === 'DIY') recBadge = `<span style="color: #6ee7b7; font-weight: 600;">🟢 ${escapeHtml(art.recommendation_label)}</span>`;
+                else if (art.recommendation_code === 'TECHNICIAN') recBadge = `<span style="color: #fcd34d; font-weight: 600;">🟡 ${escapeHtml(art.recommendation_label)}</span>`;
+                else recBadge = `<span style="color: #fda4af; font-weight: 600;">🔴 ${escapeHtml(art.recommendation_label)}</span>`;
+
+                const warningHtml = getRecommendationWarning(selectRec.value, art.recommendation_code);
+                const bookmarkBtn = isAuthenticated ? `<button type="button" onclick="toggleBookmark(${art.id}, this)" style="background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 6px 8px; cursor: pointer; color: ${art.is_bookmarked ? '#fbbf24' : '#94a3b8'};" title="Simpan Panduan">🔖</button>` : '';
+
+                return `
+                <div class="tm-card">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                                <span style="padding: 4px 10px; background: #1e293b; border-radius: 6px; font-size: 12px; font-weight:bold;">${escapeHtml(art.device_type)}</span>
+                                <span style="padding: 4px 10px; background: rgba(19,78,74,0.5); color: #5eead4; border: 1px solid rgba(20,184,166,0.3); border-radius: 6px; font-size: 12px;">${escapeHtml(art.category)}</span>
+                            </div>
+                            ${bookmarkBtn}
+                        </div>
+                        <a href="/troubleshooting/article/${art.slug}/" style="text-decoration: none; color: white;">
+                            <h2 style="font-size: 18px; font-weight: bold; margin: 0 0 8px 0;">${escapeHtml(art.title)}</h2>
+                        </a>
+                        <p style="font-size: 13px; color: #94a3b8;">${escapeHtml(art.symptoms_preview)}</p>
+                    </div>
+                    <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #1e293b;">
+                        <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 8px;">
+                            <span style="color: #94a3b8;">Rekomendasi Asli:</span>
+                            ${recBadge}
+                        </div>
+                        ${warningHtml}
+                        <div style="display: flex; justify-content: space-between; font-size: 12px; margin-top: 10px;">
+                            <span style="color: #94a3b8;">Estimasi Biaya:</span>
+                            <span style="font-weight: bold; color: #e2e8f0;">${costText}</span>
+                        </div>
+                        <a href="/troubleshooting/article/${art.slug}/" class="block w-full text-center bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-4 rounded-xl transition duration-200 mt-5 shadow-lg shadow-emerald-500/30">
+                           Baca Panduan Diagnosis ➔
+                        </a>
+                    </div>
+                </div>`;
+            }).join('');
+        } catch (error) { console.error('AJAX Error:', error); }
+    }
+
+    async function toggleBookmark(id, btn) {
+        const res = await fetch(`/troubleshooting/api/bookmark/${id}/`, { method: 'POST', headers: { 'X-CSRFToken': csrfToken }});
+        const data = await res.json();
+        btn.style.color = data.is_bookmarked ? '#fbbf24' : '#94a3b8';
+        if (!data.is_bookmarked && checkBookmarked && checkBookmarked.checked) fetchFilteredArticles();
+    }
+
+    let timer;
+    inputQ.addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(fetchFilteredArticles, 300); });
+    [selectDevice, selectCategory, selectRec].forEach(el => el.addEventListener('change', fetchFilteredArticles));
+    if (checkBookmarked) checkBookmarked.addEventListener('change', fetchFilteredArticles);
+    document.getElementById('btn-reset-filter').addEventListener('click', () => {
+        inputQ.value = ''; selectDevice.value = ''; selectCategory.value = ''; selectRec.value = '';
+        if (checkBookmarked) checkBookmarked.checked = false;
+        fetchFilteredArticles();
+    });
+</script>
+{% endblock %}

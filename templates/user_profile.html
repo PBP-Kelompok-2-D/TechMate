@@ -1,0 +1,213 @@
+{% extends 'base.html' %}
+
+{% block meta %}
+<title>Profile - {{ name }}</title>
+{% endblock meta %}
+
+{% block content %}
+<main class="profile-dashboard">
+    {% if user.is_authenticated and user != viewed_user %}
+        <button type="button"
+                class="report-button"
+                popovertarget="report-user-modal"
+                aria-label="Laporkan pengguna"
+                title="Laporkan pengguna">
+            <svg viewBox="0 0 24 24" width="28" height="28">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                <line x1="12" y1="9" x2="12" y2="13"></line>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+        </button>
+    {% endif %}
+    <div class="profile-grid">
+        <div class="profile-card profile-user-card">
+            <div id="profile-avatar" class="avatar-wrapper">
+                {% if profile.avatar %}
+                    <img src="{{ profile.avatar }}" alt="{{ viewed_user.username }}">
+                {% else %}
+                    <img src="/static/img/default_profile.svg" alt="default_profile">
+                {% endif %}
+            </div>
+
+            <div class="profile-username">{{ viewed_user.username }}</div>
+
+            {% if user.is_authenticated and user == viewed_user %}
+                <div class="profile-last-login">
+                    <span>Last Login</span>
+                    <span style="margin-top: 2px;">{{ last_login }}</span>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="profile-right-column">
+            <div id="profile-bio" class="profile-card bio-card">
+                &ldquo;{{ profile.bio|default:"Bio, default nothing yet" }}&rdquo;
+            </div>
+
+            <div class="actions-grid">
+                <div class="profile-card action-card">
+                    <img class="action-icon" src="/static/img/shop.svg" alt="user_shop">
+                    <span class="action-label">Market Items</span>
+                </div>
+                
+                <div class="profile-card action-card">
+                    <img class="action-icon" src="/static/img/contact.svg" alt="user_contact">
+                    <span class="action-label">Contact</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="profile-footer-actions">
+        {% if user.is_authenticated %}
+            {% if user == viewed_user or user.is_superuser %}
+                <button type="button" class="edit-link" popovertarget="edit-profile-modal">Edit</button>
+            {% endif %}
+
+            {% if user == viewed_user %}
+                <a href="{% url 'main:logout' %}" class="btn-logout">Logout</a>
+            {% endif %}
+        {% endif %}
+    </div>
+</main>
+{% if user.is_superuser or user == viewed_user %}
+    {% include "components/edit_profile_modal.html" %}
+{% endif %}
+{% if user.is_superuser or user == viewed_user %}
+    {% include "components/report_user_modal.html" %}
+{% endif %}
+
+<script>
+    const EDIT_PROFILE_ENDPOINT = "{% url 'main:edit_user_profile_ajax' profile.id %}";
+    const REPORT_USER_ENDPOINT = "{% url 'main:report_user_ajax' profile.id %}";
+    const DEFAULT_BIO = "Bio, default nothing yet";
+    const USERNAME = "{{ viewed_user.username|escapejs }}";
+    const AVATAR_PLACEHOLDER_HTML = `
+        <svg viewBox="0 0 24 24" width="70" height="70" stroke="var(--text-muted)" stroke-width="1.5" fill="none">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+        </svg>`;
+
+    const avatarWrapper = document.getElementById('profile-avatar');
+    const bioElement = document.getElementById('profile-bio');
+    const editForm = document.getElementById('edit-profile-form');
+    const reportForm = document.getElementById('report-user-form');
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function escapeHtml(value) {
+        return String(value ?? '')
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#39;');
+    }
+
+    function closeEditModal() {
+        document.getElementById("edit-profile-modal").hidePopover();
+    }
+
+    function closeReportModal() {
+        document.getElementById("report-user-modal").hidePopover();
+    }
+
+    function updateProfileDisplay(avatarUrl, bio) {
+        bioElement.innerHTML = `&ldquo;${escapeHtml(bio || DEFAULT_BIO)}&rdquo;`;
+
+        avatarWrapper.innerHTML = avatarUrl
+            ? `<img src="${escapeHtml(avatarUrl)}" alt="${escapeHtml(USERNAME)}">`
+            : AVATAR_PLACEHOLDER_HTML;
+    }
+
+    async function editProfile(event) {
+        event.preventDefault();
+
+        const submitButton = editForm.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
+
+        try {
+            const response = await fetch(EDIT_PROFILE_ENDPOINT, {
+                method: 'POST',
+                headers: { 'X-CSRFToken': getCookie('csrftoken') },
+                body: new FormData(editForm),
+            });
+
+            const result = await response.json().catch(() => ({}));
+
+            if (response.ok) {
+                // Sinkronkan isi form dengan data yang sudah dibersihkan server
+                editForm.elements['avatar'].value = result.avatar;
+                editForm.elements['bio'].value = result.bio;
+                updateProfileDisplay(result.avatar, result.bio);
+                closeEditModal();
+                showToast('Berhasil', 'Profil berhasil diperbarui!', 'success');
+            } else {
+                const errorMessages = result.errors
+                    ? Object.values(result.errors).flat().map(error => error.message)
+                    : [result.message || `Terjadi kesalahan (status ${response.status}).`];
+                showToast('Gagal memperbarui profil', errorMessages.join(' '), 'error');
+            }
+        } catch (error) {
+            console.error('Error editing profile:', error);
+            showToast('Gagal memperbarui profil', 'Tidak dapat terhubung ke server. Silakan coba lagi.', 'error');
+        } finally {
+            submitButton.disabled = false;
+        }
+    }
+
+    async function reportUser(event) {
+        event.preventDefault();
+
+        const submitButton = reportForm.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
+
+        try {
+            const response = await fetch(REPORT_USER_ENDPOINT, {
+                method: 'POST',
+                headers: { 'X-CSRFToken': getCookie('csrftoken') },
+                body: new FormData(reportForm),
+            });
+
+            const result = await response.json().catch(() => ({}));
+
+            if (response.ok) {
+                reportForm.reset();
+                closeReportModal();
+                showToast('Berhasil', 'Laporan berhasil dikirim. Terima kasih!', 'success');
+            } else {
+                const errorMessages = result.errors
+                    ? Object.values(result.errors).flat().map(error => error.message)
+                    : [result.message || `Terjadi kesalahan (status ${response.status}).`];
+                showToast('Gagal mengirim laporan', errorMessages.join(' '), 'error');
+            }
+        } catch (error) {
+            console.error('Error reporting user:', error);
+            showToast('Gagal mengirim laporan', 'Tidak dapat terhubung ke server. Silakan coba lagi.', 'error');
+        } finally {
+            submitButton.disabled = false;
+        }
+    }
+
+    if (editForm) {
+        editForm.addEventListener('submit', editProfile);
+    }
+
+    if (reportForm) {
+        reportForm.addEventListener('submit', reportUser);
+    }
+</script>
+{% endblock content %}
