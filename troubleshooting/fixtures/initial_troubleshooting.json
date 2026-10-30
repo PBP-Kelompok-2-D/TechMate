@@ -1,0 +1,362 @@
+[
+  {
+    "model": "troubleshooting.troubleshootingarticle", "pk": 1,
+    "fields": {
+      "title": "Baterai Smartphone Cepat Habis & Persentase Loncat (Battery Draining)", "slug": "hp-baterai-draining", "device_type": "HP", "category": "BATTERY",
+      "symptoms": "Kapasitas daya merosot tajam meski dalam kondisi idle (layar mati). Persentase baterai sering anjlok tak wajar (misal dari 40% tiba-tiba ke 15% lalu mati). Bodi perangkat terasa hangat konstan.",
+      "causes": "1. Degradasi Kimiawi: Siklus pengisian (Cycle Count) menembus >800 siklus, sel Lithium-ion kehilangan kapasitas penyimpanan elektron secara permanen.\n2. Wakelock OS: Aplikasi latar belakang yang terus membangunkan CPU dari mode Deep Sleep.\n3. IC BMS (Battery Management System) gagal membaca voltase sel secara akurat.",
+      "step_by_step_solution": "1. Analisa Software: Buka Pengaturan > Baterai, lalu batasi aktivitas latar belakang aplikasi yang paling boros.\n2. Kalibrasi BMS: Gunakan HP hingga mati total (0%), biarkan 1 jam, lalu cas hingga 100% tanpa dicabut.\n3. Penggantian: Bawa ke teknisi untuk mengganti sel baterai baru berstandar OEM/Orisinal.",
+      "recommendation": "TECHNICIAN", "difficulty": "MEDIUM", "estimated_cost_min": 150000, "estimated_cost_max": 350000,
+      "when_to_replace": "Penggantian baterai adalah pemeliharaan standar. Dengan modal sekitar 200 ribuan, masa pakai smartphone dapat diperpanjang hingga 2 tahun ke depan tanpa perlu ganti unit.",
+      "related_forum_keyword": "baterai drop", "created_at": "2026-10-28T10:00:00Z", "updated_at": "2026-10-28T10:00:00Z"
+    }
+  },
+  {
+    "model": "troubleshooting.troubleshootingarticle", "pk": 2,
+    "fields": {
+      "title": "Laptop Thermal Throttling: Panas Ekstrem & Kipas Bising", "slug": "laptop-thermal-throttling", "device_type": "LAPTOP", "category": "THERMAL",
+      "symptoms": "Kipas berputar pada RPM maksimal secara konstan (bising). Suhu CPU menyentuh 95-100 derajat Celcius. Kinerja aplikasi menurun drastis dan FPS game patah-patah (stuttering).",
+      "causes": "1. Obstruksi Fisik: Kisi-kisi heatsink tembaga tertutup gumpalan debu padat yang menghalangi pelepasan panas.\n2. Thermal Paste Mengering: Pasta penghantar panas antara Die CPU/GPU dan plat pendingin mengeras.\n3. Bantalan kipas (Fan Bearing) mulai aus karena usia pakai.",
+      "step_by_step_solution": "1. Manajemen Airflow: Gunakan stand aluminium untuk mengangkat sasis bawah, jangan gunakan laptop di atas kasur.\n2. Pantau suhu inti menggunakan aplikasi HWMonitor.\n3. Repaste & Cleaning: Bawa ke teknisi untuk membongkar kipas, membersihkan debu heatsink, dan mengganti thermal paste (contoh: Arctic MX-6 atau Thermal Grizzly).",
+      "recommendation": "TECHNICIAN", "difficulty": "MEDIUM", "estimated_cost_min": 150000, "estimated_cost_max": 300000,
+      "when_to_replace": "Jangan membuang laptop karena masalah ini. Ini adalah perawatan rutin tahunan. Performa akan kembali 100% optimal setelah dibersihkan dan direpaste.",
+      "related_forum_keyword": "overheat throttling", "created_at": "2026-10-28T10:01:00Z", "updated_at": "2026-10-28T10:01:00Z"
+    }
+  },
+  {
+    "model": "troubleshooting.troubleshootingarticle", "pk": 3,
+    "fields": {
+      "title": "Layar AMOLED Muncul Garis Vertikal Hijau/Pink (Green Line Issue)", "slug": "hp-green-line", "device_type": "HP", "category": "DISPLAY",
+      "symptoms": "Satu atau beberapa garis lurus berwarna neon (hijau, pink, atau putih) membentang vertikal dari atas ke bawah layar. Fungsi sentuh (touchscreen) umumnya masih normal.",
+      "causes": "1. Hardware Failure: Putus atau melelehnya jalur mikroskopis pada kabel fleksibel panel layar (Chip-on-Flex / COF) akibat suhu panas berlebih.\n2. Dipicu pasca update OS besar yang membebani CPU sehingga suhu sekitar konektor layar memanas.\n3. Degradasi pada batch panel OLED tertentu.",
+      "step_by_step_solution": "1. Diagnosa Dasar: Lakukan screenshot layar. Jika garis tidak terlihat di hasil screenshot, dipastikan 100% kerusakan fisik panel layar.\n2. Cek klaim garansi ke Service Center resmi.\n3. Laser Repair: Bawa ke bengkel spesialis yang memiliki mesin Laser Bonding LCD untuk menembak ulang jalur COF.\n4. Ganti Layar: Penggantian 1 set modul OLED.",
+      "recommendation": "REPLACE", "difficulty": "HARD", "estimated_cost_min": 800000, "estimated_cost_max": 3500000,
+      "when_to_replace": "Harga panel OLED orisinal sangat tinggi. Jika perbaikan laser tidak memungkinkan dan biaya ganti layar menembus 50-60% dari harga jual HP bekas Anda, lebih bijak melakukan tukar tambah.",
+      "related_forum_keyword": "green line amoled", "created_at": "2026-10-28T10:02:00Z", "updated_at": "2026-10-28T10:02:00Z"
+    }
+  },
+  {
+    "model": "troubleshooting.troubleshootingarticle", "pk": 4,
+    "fields": {
+      "title": "Laptop Lemot Parah, Booting Lambat & Disk Usage 100%", "slug": "laptop-lemot-disk-100", "device_type": "LAPTOP", "category": "PERFORMANCE",
+      "symptoms": "Proses booting masuk Windows memakan waktu lebih dari 2 menit. Membuka aplikasi sangat lambat. Task Manager menunjukkan 'Disk 100%' atau 'Memory 95%'.",
+      "causes": "1. Storage Bottleneck: Sistem operasi masih dijalankan pada Hard Disk mekanik (HDD) konvensional yang kecepatan baca/tulisnya lambat.\n2. Defisit RAM: Kapasitas RAM hanya 4GB sehingga sistem terpaksa memakai penyimpanan sebagai Virtual Memory (Paging File).\n3. Terlalu banyak program Startup yang berjalan otomatis.",
+      "step_by_step_solution": "1. Optimasi Software: Matikan aplikasi startup yang tidak penting melalui Task Manager > tab Startup.\n2. Upgrade SSD: Ganti HDD utama dengan SSD SATA atau NVMe (kecepatan baca meningkat hingga 5-10x lipat).\n3. Upgrade RAM: Tambahkan keping RAM hingga minimal 8GB atau 16GB Dual-Channel.",
+      "recommendation": "TECHNICIAN", "difficulty": "MEDIUM", "estimated_cost_min": 350000, "estimated_cost_max": 850000,
+      "when_to_replace": "Kombinasi upgrade SSD dan RAM dapat menghidupkan kembali laptop berusia 5-7 tahun. Pertimbangkan ganti unit hanya jika prosesor sudah sangat tua dan komponennya tersolder mati (tidak bisa di-upgrade).",
+      "related_forum_keyword": "lemot ssd", "created_at": "2026-10-28T10:03:00Z", "updated_at": "2026-10-28T10:03:00Z"
+    }
+  },
+  {
+    "model": "troubleshooting.troubleshootingarticle", "pk": 5,
+    "fields": {
+      "title": "Port Charger USB-C Longgar & Fast Charging Tidak Aktif", "slug": "semua-port-charger-longgar", "device_type": "ALL", "category": "HARDWARE",
+      "symptoms": "Kabel charger tidak mengunci rapat (tidak bunyi klik), mudah terlepas jika tersenggol, pengisian daya putus-nyambung, dan fitur Fast Charging mati.",
+      "causes": "1. Obstruksi Fisik: Gumpalan serat kain saku celana dan debu yang memadat di dasar lubang port USB-C.\n2. Oksidasi: Pin tembaga di dalam konektor menghitam atau berkarat karena lembap.\n3. Keausan Mekanis: Lidah pin di dalam port bengkok karena sering mencabut kabel secara miring.",
+      "step_by_step_solution": "1. Matikan daya perangkat sepenuhnya.\n2. Sorot lubang port dengan senter. Gunakan tusuk gigi plastik tipis atau jarum berbalut sedikit kapas untuk mencongkel gumpalan debu di dasar port (hati-hati jangan mencongkel pin tengah).\n3. Semprotkan sedikit cairan Contact Cleaner khusus elektronik.\n4. Jika konektor aus fisik, bawa ke teknisi untuk ganti papan konektor (Sub-board).",
+      "recommendation": "DIY", "difficulty": "EASY", "estimated_cost_min": 0, "estimated_cost_max": 150000,
+      "when_to_replace": "Sekitar 90% kasus port longgar murni karena tumpukan debu dan bisa diatasi gratis di rumah. Jika harus ganti sub-board charger, biayanya juga sangat murah.",
+      "related_forum_keyword": "port charger longgar", "created_at": "2026-10-28T10:04:00Z", "updated_at": "2026-10-28T10:04:00Z"
+    }
+  },
+  {
+    "model": "troubleshooting.troubleshootingarticle", "pk": 6,
+    "fields": {
+      "title": "HP Sering Overheat Parah & Restart Sendiri", "slug": "hp-overheat-restart", "device_type": "HP", "category": "THERMAL",
+      "symptoms": "Bodi terasa panas menyengat walau hanya membuka aplikasi ringan. Kamera tertutup otomatis karena peringatan suhu, layar meredup, atau HP restart mendadak.",
+      "causes": "1. Pasta termal (Thermal Paste/Pad) internal di atas chipset SoC sudah mengering.\n2. Korsleting minor (short) pada komponen kapasitor atau IC Power (PMIC) pasca terkena air/jatuh.\n3. Bug sistem operasi yang membuat CPU terkunci di frekuensi maksimal.",
+      "step_by_step_solution": "1. Lepaskan casing pelindung yang tebal agar panas tidak terperangkap.\n2. Lakukan update OS atau Factory Reset jika dicurigai ada bug sistem.\n3. Bawa ke teknisi untuk pengecekan arus motherboard dengan DC Power Supply dan penggantian thermal pad internal.",
+      "recommendation": "TECHNICIAN", "difficulty": "HARD", "estimated_cost_min": 150000, "estimated_cost_max": 800000,
+      "when_to_replace": "Jika panas ekstrem bersumber dari IC Power atau CPU yang mengalami korsleting berat (butuh reballing/ganti IC), biayanya tinggi dan berisiko kambuh. Pertimbangkan tukar tambah jika usia HP sudah di atas 3 tahun.",
+      "related_forum_keyword": "overheat restart", "created_at": "2026-10-28T10:05:00Z", "updated_at": "2026-10-28T10:05:00Z"
+    }
+  },
+  {
+    "model": "troubleshooting.troubleshootingarticle", "pk": 7,
+    "fields": {
+      "title": "HP Mati Total, Mentok Logo (Bootloop), & Sistem Freeze", "slug": "hp-bootloop-mati", "device_type": "HP", "category": "PERFORMANCE",
+      "symptoms": "Sistem sering macet (freeze). Saat dinyalakan ulang, HP hanya berhenti di logo merk (Bootloop) atau mati total (Hard Brick) tanpa respon saat dicas.",
+      "causes": "1. Degradasi Memori: Chip penyimpanan internal (IC eMMC / UFS) sudah aus melewati batas siklus baca-tulisnya sehingga partisi OS rusak.\n2. Kegagalan Daya: IC Power (PMIC) atau CPU mengalami short circuit.\n3. Kegagalan pembaruan perangkat lunak (Update OTA terputus).",
+      "step_by_step_solution": "1. Masuk ke Recovery Mode (tahan tombol Power + Volume Atas), lalu pilih Wipe Data / Factory Reset (data akan terhapus).\n2. Lakukan Flashing firmware ulang melalui PC.\n3. Jika saat dicolok ke PC hanya terdeteksi sebagai 'Qualcomm HS-USB QDLoader 9008', maka IC eMMC/UFS atau CPU mengalami kerusakan hardware.",
+      "recommendation": "REPLACE", "difficulty": "HARD", "estimated_cost_min": 500000, "estimated_cost_max": 1800000,
+      "when_to_replace": "Penggantian atau cetak ulang (reballing) IC eMMC/CPU memakan biaya besar dan ketahanannya jarang berumur panjang. Lebih ekonomis menjual unit sebagai kanibalan sparepart dan mengganti perangkat.",
+      "related_forum_keyword": "bootloop mati", "created_at": "2026-10-28T10:06:00Z", "updated_at": "2026-10-28T10:06:00Z"
+    }
+  },
+  {
+    "model": "troubleshooting.troubleshootingarticle", "pk": 8,
+    "fields": {
+      "title": "Baterai HP Kembung Parah Hingga Casing/Layar Terangkat", "slug": "hp-baterai-kembung", "device_type": "HP", "category": "BATTERY",
+      "symptoms": "Penutup belakang (backdoor) melengkung terbuka, panel layar terdorong naik dari bingkai (frame), dan muncul bercak warna tertekan pada LCD.",
+      "causes": "1. Reaksi Kimia (Outgassing): Elektrolit cair di dalam sel baterai Lithium-Polymer terurai menjadi gas akibat usia pakai atau panas berlebih.\n2. Kebiasaan mengecas terus-menerus sambil menjalankan beban berat (gaming).\n3. Kualitas sel baterai pengganti sebelumnya yang buruk.",
+      "step_by_step_solution": "1. HENTIKAN PENGGUNAAN SEGERA! Jangan menekan layar yang terangkat dan jangan menusuk bungkusan baterai karena berisiko memicu api (Thermal Runaway).\n2. Matikan perangkat agar layar LCD tidak pecah karena tekanan dari bawah.\n3. Bawa segera ke teknisi untuk pelepasan baterai menggunakan cairan pelepas lem khusus dan pasang baterai baru.",
+      "recommendation": "TECHNICIAN", "difficulty": "MEDIUM", "estimated_cost_min": 150000, "estimated_cost_max": 400000,
+      "when_to_replace": "Sangat layak diservis. Selama panel layar LCD belum retak akibat terdorong baterai, Anda hanya perlu mengeluarkan biaya penggantian baterai yang relatif terjangkau.",
+      "related_forum_keyword": "baterai kembung", "created_at": "2026-10-28T10:07:00Z", "updated_at": "2026-10-28T10:07:00Z"
+    }
+  },
+  {
+    "model": "troubleshooting.troubleshootingarticle", "pk": 9,
+    "fields": {
+      "title": "Kaca Pelindung Kamera Belakang HP Pecah / Foto Buram", "slug": "hp-kamera-pecah", "device_type": "HP", "category": "HARDWARE",
+      "symptoms": "Hasil foto tampak berkabut, buram, atau muncul pantulan cahaya (glare/flare) saat memotret lampu. Terlihat retakan fisik pada kaca lensa luar, namun kamera masih bisa fokus.",
+      "causes": "Benturan langsung pada modul kamera yang menonjol (camera bump) saat terjatuh, atau tertekan benda keras seperti kunci di dalam saku.",
+      "step_by_step_solution": "1. Segera tutup permukaan kaca kamera yang retak dengan selotip bening agar debu mikro atau serpihan kaca tidak masuk merusak sensor optik utama.\n2. Beli suku cadang 'Kaca Lensa Kamera (Camera Lens Glass)' sesuai tipe HP beserta lem B7000 di e-commerce.\n3. Panaskan area kaca lensa sedikit dengan hairdryer, angkat pecahan kaca dengan pinset secara hati-hati, bersihkan sisa lem, lalu pasang kaca baru.",
+      "recommendation": "DIY", "difficulty": "EASY", "estimated_cost_min": 15000, "estimated_cost_max": 50000,
+      "when_to_replace": "Perbaikan ini bersifat eksternal dan sangat murah. Selama modul sensor kamera di dalamnya belum tergores debu, Anda tidak perlu mengganti modul kamera maupun mengganti HP.",
+      "related_forum_keyword": "kamera pecah buram", "created_at": "2026-10-28T10:08:00Z", "updated_at": "2026-10-28T10:08:00Z"
+    }
+  },
+  {
+    "model": "troubleshooting.troubleshootingarticle", "pk": 10,
+    "fields": {
+      "title": "Tablet Mati Total (Sleep Death) & Tidak Merespons Saat Dicas", "slug": "tablet-mati-total-baterai", "device_type": "TABLET", "category": "BATTERY",
+      "symptoms": "Layar gelap total, tidak muncul indikator pengisian daya, dan tidak ada getaran meski sudah dicolok charger orisinal selama berjam-jam.",
+      "causes": "1. Deep Discharge (Sleep Death): Baterai dibiarkan kosong (0%) terlalu lama sehingga voltase sel jatuh di bawah batas minimum untuk mengaktifkan IC Charging.\n2. Sistem operasi mengalami crash/hang di latar belakang.\n3. Konektor fleksibel baterai terlepas karena guncangan.",
+      "step_by_step_solution": "1. Lakukan Force Restart: Tekan dan tahan tombol Power + Volume Bawah secara bersamaan selama 20-30 detik penuh.\n2. Gunakan adaptor charger dengan daya (Watt) yang lebih tinggi dan diamkan selama 1-2 jam.\n3. Jika tetap mati, bawa ke teknisi untuk dilakukan kejut daya (Tembak Baterai) langsung ke soket baterai menggunakan alat Desktop Power Supply.",
+      "recommendation": "TECHNICIAN", "difficulty": "MEDIUM", "estimated_cost_min": 100000, "estimated_cost_max": 350000,
+      "when_to_replace": "Prosedur kejut baterai atau pemasangan ulang soket baterai biayanya sangat terjangkau. Tablet dapat kembali normal sepenuhnya tanpa perlu ganti unit.",
+      "related_forum_keyword": "tablet mati total", "created_at": "2026-10-28T10:09:00Z", "updated_at": "2026-10-28T10:09:00Z"
+    }
+  },
+  {
+    "model": "troubleshooting.troubleshootingarticle", "pk": 11,
+    "fields": {
+      "title": "Tablet Sentuhan Kurang Responsif & Garis Stylus Putus-Putus", "slug": "tablet-layar-kurang-responsif", "device_type": "TABLET", "category": "DISPLAY",
+      "symptoms": "Sentuhan jari sering tidak terbaca di beberapa titik. Saat menulis dengan stylus/pena, garis yang dihasilkan terputus-putus atau muncul ghost touch ketika dicas.",
+      "causes": "1. Pelindung layar (Tempered Glass) terlalu tebal atau berkualitas buruk sehingga menghambat sensor kapasitif digitizer.\n2. Ujung mata pena (nib/tip) stylus sudah aus atau kendor.\n3. Kebocoran arus (ripple current) dari charger non-orisinal.",
+      "step_by_step_solution": "1. Cabut kabel charger saat menggunakan stylus untuk menguji apakah gangguan berasal dari arus listrik.\n2. Aktifkan fitur 'Touch Sensitivity' (Sensitivitas Sentuhan) di menu Pengaturan Tampilan.\n3. Kencangkan atau ganti ujung mata pena (nib) stylus dengan cadangannya.\n4. Lepas tempered glass tebal dan ganti dengan pelindung layar tipis (seperti tipe Paperlike).",
+      "recommendation": "DIY", "difficulty": "EASY", "estimated_cost_min": 0, "estimated_cost_max": 80000,
+      "when_to_replace": "Masalah ini hampir selalu disebabkan oleh faktor aksesori (antigores, nib stylus, atau charger KW), bukan kerusakan panel layar tablet. Sangat mudah diatasi sendiri.",
+      "related_forum_keyword": "stylus putus sentuhan", "created_at": "2026-10-28T10:10:00Z", "updated_at": "2026-10-28T10:10:00Z"
+    }
+  },
+  {
+    "model": "troubleshooting.troubleshootingarticle", "pk": 12,
+    "fields": {
+      "title": "Layar Tablet Pecah Parah, Tinta Bocor & Touchscreen Mati", "slug": "tablet-layar-pecah", "device_type": "TABLET", "category": "DISPLAY",
+      "symptoms": "Kaca layar retak menyebar, muncul bercak hitam atau garis warna-warni di dalam layar (tinta LCD bocor), dan layar sentuh mati di sebagian atau seluruh area.",
+      "causes": "Benturan fisik keras akibat terjatuh dari ketinggian, tertindih beban tubuh di atas kasur/sofa, atau tertekan barang berat di dalam tas.",
+      "step_by_step_solution": "1. Matikan tablet untuk menghindari penekanan acak (ghost touch) yang bisa mengunci passcode perangkat.\n2. Lapisi permukaan layar yang pecah dengan lakban bening agar serpihan kaca tidak melukai jari.\n3. Bawa ke Service Center untuk penggantian satu set modul layar (Fullset LCD + Touchscreen Assembly).",
+      "recommendation": "REPLACE", "difficulty": "HARD", "estimated_cost_min": 1000000, "estimated_cost_max": 4000000,
+      "when_to_replace": "Modul layar berukuran besar menyumbang sekitar 60-75% dari harga tablet. Jika biaya ganti layar orisinal mendekati harga beli tablet bekas sejenis, lebih disarankan menjual unit rusak tersebut dan melakukan tukar tambah.",
+      "related_forum_keyword": "layar tablet pecah", "created_at": "2026-10-28T10:11:00Z", "updated_at": "2026-10-28T10:11:00Z"
+    }
+  },
+  {
+    "model": "troubleshooting.troubleshootingarticle", "pk": 13,
+    "fields": {
+      "title": "Tablet Overheat Saat Main Game / Rendering & Layar Meredup", "slug": "tablet-panas-main-game", "device_type": "TABLET", "category": "THERMAL",
+      "symptoms": "Bodi belakang tablet terasa sangat panas di satu titik, kecerahan layar turun drastis secara otomatis (Auto-Dimming), dan frame rate game menjadi patah-patah.",
+      "causes": "1. Sistem Pendinginan Pasif: Tablet tipis tidak memiliki kipas internal, sehingga seluruh panas CPU/GPU dibuang melalui sasis aluminium belakang.\n2. Penggunaan flip-cover atau casing tebal yang menghalangi pelepasan panas dari bodi belakang.\n3. Beban grafis maksimal sambil melakukan pengisian daya.",
+      "step_by_step_solution": "1. Lepaskan flip-cover atau casing pelindung saat bermain game berat atau mengedit video.\n2. Turunkan pengaturan grafis game ke tingkat Medium dan batasi frame rate di 60 FPS.\n3. Gunakan kipas pendingin eksternal (Magnetic Peltier Cooler) yang ditempelkan di area bodi belakang yang paling panas.",
+      "recommendation": "DIY", "difficulty": "EASY", "estimated_cost_min": 0, "estimated_cost_max": 150000,
+      "when_to_replace": "Peredupan layar saat panas adalah fitur pengaman normal dari sistem operasi untuk melindungi baterai dan chipset. Tidak ada komponen yang rusak, cukup bantu dengan pendingin eksternal.",
+      "related_forum_keyword": "tablet panas game", "created_at": "2026-10-28T10:12:00Z", "updated_at": "2026-10-28T10:12:00Z"
+    }
+  },
+  {
+    "model": "troubleshooting.troubleshootingarticle", "pk": 14,
+    "fields": {
+      "title": "Memori Penyimpanan Tablet / HP Penuh Padahal File Sedikit", "slug": "tablet-memori-penuh", "device_type": "TABLET", "category": "PERFORMANCE",
+      "symptoms": "Muncul peringatan 'Storage Almost Full', gagal mengunduh pembaruan aplikasi, dan aplikasi sering keluar sendiri (force close) karena kehabisan ruang.",
+      "causes": "1. Penumpukan file Cache (data sementara) dari aplikasi media sosial (TikTok, Instagram, Telegram) yang bisa membengkak hingga puluhan Gigabyte.\n2. File sampah sisa pembaruan sistem (System Data / Other) yang tidak terhapus otomatis.\n3. Unduhan video offline di aplikasi streaming.",
+      "step_by_step_solution": "1. Buka Pengaturan > Penyimpanan, lalu cek aplikasi dengan ukuran terbesar.\n2. Pilih aplikasi tersebut dan klik 'Hapus Cache' (Clear Cache) — jangan pilih Clear Data jika tidak ingin login ulang.\n3. Pada Telegram/WhatsApp, masuk ke pengaturan penyimpanan internal aplikasi untuk menghapus cache media lama.\n4. Sisakan minimal 4-5 GB ruang kosong agar sistem operasi berjalan lancar.",
+      "recommendation": "DIY", "difficulty": "EASY", "estimated_cost_min": 0, "estimated_cost_max": 0,
+      "when_to_replace": "Masalah ini murni pengelolaan file perangkat lunak dan dapat diatasi 100% gratis. Manfaatkan layanan Cloud Storage daripada membeli perangkat baru hanya demi memori yang lebih besar.",
+      "related_forum_keyword": "storage penuh", "created_at": "2026-10-28T10:13:00Z", "updated_at": "2026-10-28T10:13:00Z"
+    }
+  },
+  {
+    "model": "troubleshooting.troubleshootingarticle", "pk": 15,
+    "fields": {
+      "title": "Engsel Layar Laptop Patah & Casing Bawah Terangkat", "slug": "laptop-engsel-patah", "device_type": "LAPTOP", "category": "HARDWARE",
+      "symptoms": "Terdengar bunyi retakan keras ('krek') saat membuka atau menutup layar. Bingkai (bezel) layar bagian bawah atau casing dekat keyboard terangkat membuka celah.",
+      "causes": "1. Pelumas pada engsel besi mengering sehingga engsel menjadi sangat berat dan kaku.\n2. Dudukan mur kuningan (brass nut) pada casing plastik jebol karena tidak kuat menahan tekanan engsel yang kaku.\n3. Kebiasaan membuka layar dari sudut kiri/kanan, bukan dari bagian tengah atas.",
+      "step_by_step_solution": "1. JANGAN PAKSA MENUTUP LAYAR! Menutup paksa akan mematahkan panel LCD atau memutuskan kabel fleksibel layar dan Wi-Fi.\n2. Biarkan laptop dalam posisi terbuka dan bawa ke teknisi spesialis bodi laptop.\n3. Teknisi akan melonggarkan setelan mur engsel besi, memberi pelumas, dan mengecor ulang dudukan baut yang jebol menggunakan cairan Resin Epoxy khusus.",
+      "recommendation": "TECHNICIAN", "difficulty": "HARD", "estimated_cost_min": 200000, "estimated_cost_max": 450000,
+      "when_to_replace": "Rekonstruksi dudukan engsel dengan resin jauh lebih kuat dari plastik bawaan pabrik dan biayanya hemat (dibanding mengganti full casing resmi). Sangat layak diservis.",
+      "related_forum_keyword": "engsel patah casing", "created_at": "2026-10-28T10:14:00Z", "updated_at": "2026-10-28T10:14:00Z"
+    }
+  },
+  {
+    "model": "troubleshooting.troubleshootingarticle", "pk": 16,
+    "fields": {
+      "title": "Layar Laptop Berkedip (Flickering) Atau Blank Hitam Saat Nyala", "slug": "laptop-layar-flicker-blank", "device_type": "LAPTOP", "category": "DISPLAY",
+      "symptoms": "Layar berkedip-kedip atau muncul garis gangguan saat layar digerakkan. Pada kondisi lain, lampu indikator power dan kipas menyala normal, tetapi layar gelap total (No Display).",
+      "causes": "1. Kabel fleksibel layar (LVDS/eDP Cable) yang melewati celah engsel mulai aus, terjepit, atau kendor.\n2. Pin kuningan pada keping RAM kotor teroksidasi sehingga gagal melewati proses POST BIOS (kasus layar blank hitam).\n3. Kerusakan pada lampu Backlight atau panel LCD.",
+      "step_by_step_solution": "1. Uji Monitor Eksternal: Hubungkan laptop ke monitor/TV via kabel HDMI. Jika tampilan di TV normal, berarti masalah murni pada kabel fleksibel atau panel LCD laptop.\n2. Jika di TV juga gelap, matikan laptop, bongkar penutup bawah, cabut keping RAM, lalu gosok pin kuningannya dengan penghapus pensil hingga bersih dan pasang kembali.\n3. Bawa ke teknisi untuk penggantian kabel fleksibel layar atau panel LCD.",
+      "recommendation": "TECHNICIAN", "difficulty": "MEDIUM", "estimated_cost_min": 200000, "estimated_cost_max": 1500000,
+      "when_to_replace": "Jika hanya karena RAM kotor atau kabel fleksibel aus, biayanya sangat murah. Penggantian panel LCD (sekitar 800rb - 1,5jt) juga tetap jauh lebih hemat dibandingkan membeli laptop baru.",
+      "related_forum_keyword": "flicker blank", "created_at": "2026-10-28T10:15:00Z", "updated_at": "2026-10-28T10:15:00Z"
+    }
+  },
+  {
+    "model": "troubleshooting.troubleshootingarticle", "pk": 17,
+    "fields": {
+      "title": "Laptop Ketumpahan Cairan (Water Spill) & Mati Korsleting", "slug": "laptop-kena-air-mati", "device_type": "LAPTOP", "category": "HARDWARE",
+      "symptoms": "Laptop langsung mati mendadak setelah ketumpahan air, kopi, atau teh. Tombol keyboard menekan sendiri, atau tercium bau hangus dari celah ventilasi.",
+      "causes": "Cairan yang merembes lewat sela keyboard mengenai jalur sirkuit motherboard yang masih dialiri arus listrik baterai, memicu hubung singkat (short circuit) dan korosi cepat pada komponen IC.",
+      "step_by_step_solution": "1. TINDAKAN DETIK PERTAMA: Langsung tekan dan tahan tombol Power selama 10-15 detik hingga mati paksa, lalu cabut kabel charger!\n2. Balikkan laptop membentuk huruf V terbalik (posisi tenda) di atas handuk agar cairan menetes keluar ke arah keyboard dan tidak merembes ke motherboard.\n3. JANGAN PERNAH menyalakan laptop untuk mengetes, dan jangan gunakan hairdryer panas.\n4. Segera bawa ke teknisi untuk dibongkar, dilepas baterainya, dan dicuci dengan cairan Ultrasonic Cleaner / Isopropil Alkohol.",
+      "recommendation": "REPLACE", "difficulty": "HARD", "estimated_cost_min": 500000, "estimated_cost_max": 3500000,
+      "when_to_replace": "Jika Anda sigap mematikan daya di detik pertama, biaya pembersihan korosi dan ganti keyboard relatif terjangkau. Namun jika cairan sudah membakar chipset CPU/GPU di motherboard, biaya ganti motherboard baru sangat mahal dan lebih baik ganti unit.",
+      "related_forum_keyword": "tumpah air mati", "created_at": "2026-10-28T10:16:00Z", "updated_at": "2026-10-28T10:16:00Z"
+    }
+  },
+  {
+    "model": "troubleshooting.troubleshootingarticle", "pk": 18,
+    "fields": {
+      "title": "Baterai Laptop Tertahan di 60%/80% (Plugged In, Not Charging)", "slug": "laptop-baterai-not-charging", "device_type": "LAPTOP", "category": "BATTERY",
+      "symptoms": "Status baterai tertulis 'Plugged in' (tercolok), namun persentase pengisian daya berhenti dan tidak mau naik melewati angka 60% atau 80%.",
+      "causes": "1. Fitur Battery Conservation / Battery Health Charging pada aplikasi bawaan laptop (seperti Lenovo Vantage, MyASUS, Acer Care Center) sedang aktif untuk membatasi pengisian penuh.\n2. Bug pada driver manajemen daya Windows (ACPI Battery Driver).\n3. Adaptor charger kekurangan daya (watt lebih kecil dari standar).",
+      "step_by_step_solution": "1. Buka aplikasi kontrol bawaan laptop (Lenovo Vantage / MyASUS), masuk ke menu Power/Battery, lalu matikan fitur 'Conservation Mode' jika ingin mengisi hingga 100%.\n2. Jika tidak ada fitur tersebut, buka Device Manager > Batteries > klik kanan pada 'Microsoft ACPI-Compliant Control Method Battery' > pilih Uninstall Device, lalu Restart laptop.",
+      "recommendation": "DIY", "difficulty": "EASY", "estimated_cost_min": 0, "estimated_cost_max": 0,
+      "when_to_replace": "Ini bukan kerusakan baterai, melainkan fitur pintar untuk memperpanjang umur sel Lithium jika laptop sering dipakai sambil dicolok charger. Tidak perlu biaya servis sama sekali.",
+      "related_forum_keyword": "stuck not charging", "created_at": "2026-10-28T10:17:00Z", "updated_at": "2026-10-28T10:17:00Z"
+    }
+  },
+  {
+    "model": "troubleshooting.troubleshootingarticle", "pk": 19,
+    "fields": {
+      "title": "Layar HP Berbayang Cetakan Pudar (OLED Burn-In / Image Retention)", "slug": "hp-layar-burn-in", "device_type": "HP", "category": "DISPLAY",
+      "symptoms": "Muncul bayangan transparan permanen (seperti cetakan ikon baterai, tombol navigasi TikTok, atau keyboard) yang tetap terlihat membayang di latar layar meskipun sudah berpindah aplikasi.",
+      "causes": "Degradasi tidak merata pada sub-piksel organik layar OLED/AMOLED akibat menampilkan elemen gambar statis yang sama terus-menerus dengan tingkat kecerahan (brightness) tinggi.",
+      "step_by_step_solution": "1. Aktifkan Mode Gelap (Dark Mode) secara permanen dan kurangi durasi Screen Timeout menjadi 30 detik agar burn-in tidak semakin parah.\n2. Gunakan navigasi gestur (usap) untuk menggantikan tombol navigasi statis di bawah layar.\n3. Karena burn-in adalah keausan fisik piksel, satu-satunya cara menghilangkannya 100% adalah mengganti panel layar.",
+      "recommendation": "REPLACE", "difficulty": "HARD", "estimated_cost_min": 1000000, "estimated_cost_max": 3000000,
+      "when_to_replace": "Jika bayangan masih tipis, perangkat masih sangat layak dipakai tanpa perlu diganti layarnya. Namun jika sudah sangat mengganggu dan harga layar AMOLED baru melebihi separuh harga HP bekasnya, lebih baik tukar tambah.",
+      "related_forum_keyword": "burn in shadow", "created_at": "2026-10-28T10:18:00Z", "updated_at": "2026-10-28T10:18:00Z"
+    }
+  },
+  {
+    "model": "troubleshooting.troubleshootingarticle", "pk": 20,
+    "fields": {
+      "title": "Keyboard Laptop Macet Sebagian atau Ngetik Dobel (Chattering)", "slug": "laptop-keyboard-macet", "device_type": "LAPTOP", "category": "HARDWARE",
+      "symptoms": "Beberapa tombol huruf tidak berfungsi saat ditekan, terasa mengganjal, atau muncul 2-3 huruf sekaligus meskipun hanya ditekan satu kali.",
+      "causes": "1. Kotoran, debu, atau remahan makanan menyumbat mekanisme engsel gunting (scissor-switch) di bawah tombol.\n2. Korosi atau kelembapan pada jalur membran fleksibel keyboard internal.",
+      "step_by_step_solution": "1. Matikan laptop, miringkan 45 derajat, lalu semprot sela-sela tombol menggunakan kaleng semprotan udara (Compressed Air Duster) dan kuas halus.\n2. Untuk masalah ngetik dobel (chattering), gunakan software gratis 'Keyboard Chattering Fix' untuk memfilter input ganda secara software.\n3. Jika jalur membran sudah putus/korosi, bawa ke teknisi untuk mengganti modul keyboard internal baru.",
+      "recommendation": "TECHNICIAN", "difficulty": "MEDIUM", "estimated_cost_min": 150000, "estimated_cost_max": 450000,
+      "when_to_replace": "Penggantian modul keyboard laptop tergolong servis ringan dan murah. Sebagai solusi darurat tanpa biaya servis, Anda juga bisa menggunakan keyboard eksternal USB/Bluetooth.",
+      "related_forum_keyword": "keyboard macet ngetik dobel", "created_at": "2026-10-28T10:19:00Z", "updated_at": "2026-10-28T10:19:00Z"
+    }
+  },
+  {
+    "model": "troubleshooting.troubleshootingarticle", "pk": 21,
+    "fields": {
+      "title": "Tablet Susah Konek Wi-Fi & Sinyal Bluetooth Putus-Putus", "slug": "tablet-susah-sinyal", "device_type": "TABLET", "category": "HARDWARE",
+      "symptoms": "Tangkapan sinyal Wi-Fi sangat lemah (hanya 1 bar) walau berada dekat router, atau suara pada TWS Bluetooth sering patah-patah dan terputus sendiri.",
+      "causes": "1. Konektor kabel antena koaksial internal kendor atau terlepas dari papan motherboard akibat benturan.\n2. Penggunaan casing pelindung berbahan logam/aluminium yang menghalangi gelombang radio (efek sangkar Faraday).\n3. Gangguan konfigurasi jaringan atau kerusakan IC Wi-Fi/Bluetooth.",
+      "step_by_step_solution": "1. Lepaskan casing pelindung tablet, terutama yang mengandung unsur logam atau magnet besar.\n2. Masuk ke Pengaturan > Sistem > Opsi Reset > pilih 'Reset Pengaturan Jaringan' (Reset Network Settings).\n3. Jika sinyal tetap hilang, bawa ke teknisi untuk memasang ulang soket antena internal atau mengganti kabel antena.",
+      "recommendation": "TECHNICIAN", "difficulty": "MEDIUM", "estimated_cost_min": 150000, "estimated_cost_max": 450000,
+      "when_to_replace": "Perbaikan jalur antena Wi-Fi sangat terjangkau dan memiliki tingkat keberhasilan tinggi. Tidak perlu mengganti perangkat tablet Anda.",
+      "related_forum_keyword": "wifi sinyal bluetooth", "created_at": "2026-10-28T10:20:00Z", "updated_at": "2026-10-28T10:20:00Z"
+    }
+  },
+  {
+    "model": "troubleshooting.troubleshootingarticle", "pk": 22,
+    "fields": {
+      "title": "HP Cepat Panas Saat Dicas (Charging Overheat Protection)", "slug": "hp-panas-dicas", "device_type": "HP", "category": "THERMAL",
+      "symptoms": "Bodi HP terasa sangat panas saat sedang mengisi daya, dan kecepatan Fast Charging tiba-tiba melambat atau berhenti sementara di sekitar 80%.",
+      "causes": "1. Hukum fisika konduksi daya tinggi (Fast Charging 33W-120W) secara alami menghasilkan panas pada sel baterai dan IC Charging.\n2. Mengecas HP di atas kasur/bantal atau menggunakan softcase tebal sehingga panas terperangkap.\n3. Menggunakan HP untuk bermain game berat bersamaan saat dicas.",
+      "step_by_step_solution": "1. Lepaskan casing pelindung dan letakkan HP di permukaan datar yang dingin (seperti meja kayu/keramik) saat dicas.\n2. Hindari memainkan game atau membuka kamera saat proses Fast Charging berlangsung.\n3. Pastikan menggunakan kepala adaptor dan kabel data orisinal yang mendukung protokol pengisian daya perangkat Anda.",
+      "recommendation": "DIY", "difficulty": "EASY", "estimated_cost_min": 0, "estimated_cost_max": 0,
+      "when_to_replace": "Melambatnya pengisian daya saat suhu panas adalah fitur proteksi normal sistem operasi untuk mencegah kerusakan baterai. Cukup ubah kebiasaan mengecas tanpa perlu ke tempat servis.",
+      "related_forum_keyword": "panas dicas overheat", "created_at": "2026-10-28T10:21:00Z", "updated_at": "2026-10-28T10:21:00Z"
+    }
+  },
+  {
+    "model": "troubleshooting.troubleshootingarticle", "pk": 23,
+    "fields": {
+      "title": "Speaker HP / Laptop Sember, Pecah & Suara Mengecil", "slug": "semua-speaker-pecah", "device_type": "ALL", "category": "HARDWARE",
+      "symptoms": "Suara musik atau nada dering terdengar gemeresik, pecah (cempreng) pada volume di atas 70%, atau suara terdengar sangat kecil seperti teredam.",
+      "causes": "1. Lubang jaring (grill) speaker tertutup tumpukan debu padat, atau serbuk pasir besi yang menempel pada magnet speaker.\n2. Masuknya tetesan air yang menahan getaran membran speaker.\n3. Membran karet speaker robek (blown speaker) karena sering dipaksa memutar audio di volume maksimal.",
+      "step_by_step_solution": "1. Buka YouTube dan putar video '165Hz Speaker Cleaner / Water Eject' pada volume penuh selama 2-3 menit untuk mendorong air dan debu keluar lewat getaran frekuensi rendah.\n2. Gunakan sikat gigi kering berbulu halus atau tempel-tarik perekat Blu-tack pada kisi-kisi lubang speaker (jangan menusuk lubang speaker dengan jarum).\n3. Jika membran speaker sudah robek, bawa ke teknisi untuk mengganti modul Buzzer Speaker.",
+      "recommendation": "DIY", "difficulty": "EASY", "estimated_cost_min": 0, "estimated_cost_max": 150000,
+      "when_to_replace": "Masalah speaker kotor bisa diatasi sendiri secara gratis. Kalaupun komponen modul speaker harus diganti di teknisi, harga suku cadangnya sangat murah.",
+      "related_forum_keyword": "speaker pecah sember", "created_at": "2026-10-28T10:22:00Z", "updated_at": "2026-10-28T10:22:00Z"
+    }
+  },
+  {
+    "model": "troubleshooting.troubleshootingarticle", "pk": 24,
+    "fields": {
+      "title": "Baterai Laptop Drop Cepat Habis dalam Hitungan Menit", "slug": "laptop-baterai-drop-cepat", "device_type": "LAPTOP", "category": "BATTERY",
+      "symptoms": "Baterai terisi 100%, namun saat kabel charger dicabut, baterai hanya bertahan 15-30 menit lalu langsung drop dan mati mendadak.",
+      "causes": "1. Degradasi sel baterai Lithium-ion akibat usia pakai (di atas 2-3 tahun) sehingga kapasitas asli (Full Charge Capacity) menyusut drastis dibandingkan Design Capacity.\n2. Beberapa sel di dalam rangkaian baterai sudah mati (cell failure).",
+      "step_by_step_solution": "1. Cek kesehatan baterai: Buka Command Prompt (CMD), ketik 'powercfg /batteryreport', lalu buka file HTML yang dihasilkan untuk melihat perbandingan Design Capacity vs Full Charge Capacity.\n2. Jika kapasitas tersisa sudah di bawah 40%, kalibrasi software tidak akan membantu.\n3. Bawa ke teknisi atau beli baterai OEM baru yang sesuai dengan kode part baterai laptop Anda.",
+      "recommendation": "TECHNICIAN", "difficulty": "MEDIUM", "estimated_cost_min": 400000, "estimated_cost_max": 900000,
+      "when_to_replace": "Mengganti baterai baru akan mengembalikan mobilitas laptop Anda sepenuhnya dan jauh lebih hemat serta ramah lingkungan dibandingkan membeli laptop baru.",
+      "related_forum_keyword": "baterai laptop drop", "created_at": "2026-10-28T10:23:00Z", "updated_at": "2026-10-28T10:23:00Z"
+    }
+  },
+  {
+    "model": "troubleshooting.troubleshootingarticle", "pk": 25,
+    "fields": {
+      "title": "HP Touchscreen Ghost Touch (Layar Bergerak & Ngetik Sendiri)", "slug": "hp-ghost-touch", "device_type": "HP", "category": "DISPLAY",
+      "symptoms": "Layar merespons sentuhan sendiri, menggeser menu, atau mengetik huruf secara acak tanpa disentuh, terutama semakin parah saat HP sedang dicas.",
+      "causes": "1. Arus bocor (EMI ripple noise) dari kepala charger atau kabel non-orisinal yang mengganggu matriks kapasitif layar.\n2. Embun, minyak, atau kotoran yang terjebak di bawah pelindung layar (Tempered Glass) yang sudah retak.\n3. Kerusakan pada jalur fleksibel digitizer atau IC Touchscreen.",
+      "step_by_step_solution": "1. Cabut kabel charger segera. Jika layar langsung normal saat charger dicabut, ganti charger Anda dengan yang orisinal/berkualitas.\n2. Lepaskan tempered glass lama, lalu bersihkan permukaan layar menggunakan kain microfiber dan sedikit alkohol isopropil 70%.\n3. Jika ghost touch tetap terjadi tanpa charger dan tanpa antigores, bawa ke teknisi untuk perbaikan jalur sentuh atau ganti LCD.",
+      "recommendation": "TECHNICIAN", "difficulty": "MEDIUM", "estimated_cost_min": 250000, "estimated_cost_max": 650000,
+      "when_to_replace": "Jika disebabkan oleh charger atau antigores, perbaikannya sangat murah. Jika harus ganti kaca digitizer/LCD di teknisi, biayanya masih sepadan selama di bawah 40% harga perangkat.",
+      "related_forum_keyword": "ghost touch ngetik sendiri", "created_at": "2026-10-28T10:24:00Z", "updated_at": "2026-10-28T10:24:00Z"
+    }
+  },
+  {
+    "model": "troubleshooting.troubleshootingarticle", "pk": 26,
+    "fields": {
+      "title": "Baterai Tablet Cepat Habis & Drop Mendadak (Battery Drain)", "slug": "tablet-baterai-drop", "device_type": "TABLET", "category": "BATTERY",
+      "symptoms": "Persentase baterai tablet turun sangat cepat saat dipakai menonton atau mencatat, dan sering langsung mati ketika baterai menyentuh angka 15-20%.",
+      "causes": "1. Penuaan sel baterai Lithium-Polymer setelah ratusan siklus pengisian daya.\n2. Kecerahan layar yang selalu diatur maksimal (100%) dan fitur sinkronisasi latar belakang yang aktif terus-menerus.",
+      "step_by_step_solution": "1. Kurangi kecerahan layar dan matikan fitur Background App Refresh untuk aplikasi yang jarang digunakan.\n2. Lakukan kalibrasi baterai dengan menguras daya hingga mati, lalu cas hingga 100% dalam keadaan mati.\n3. Bawa ke teknisi berpengalaman untuk mengganti baterai internal tablet (membutuhkan pemanas layar khusus untuk membuka bodi tablet).",
+      "recommendation": "TECHNICIAN", "difficulty": "HARD", "estimated_cost_min": 400000, "estimated_cost_max": 800000,
+      "when_to_replace": "Membongkar layar tablet memiliki risiko tinggi jika dilakukan sendiri, namun biaya penggantian baterai di teknisi sangat layak dibandingkan membeli tablet baru.",
+      "related_forum_keyword": "baterai tablet drop", "created_at": "2026-10-28T10:25:00Z", "updated_at": "2026-10-28T10:25:00Z"
+    }
+  },
+  {
+    "model": "troubleshooting.troubleshootingarticle", "pk": 27,
+    "fields": {
+      "title": "Tablet Layar Hitam (Blank) Tapi Suara dan Getar Masih Hidup", "slug": "tablet-blank-hitam", "device_type": "TABLET", "category": "DISPLAY",
+      "symptoms": "Layar tablet gelap gulita tidak menampilkan gambar apa pun, namun perangkat masih berbunyi saat menerima notifikasi atau saat dicolokkan ke charger.",
+      "causes": "1. Sistem grafik OS mengalami crash saat mode sleep.\n2. Konektor fleksibel LCD di dalam tablet terlepas akibat benturan.\n3. Lampu latar (Backlight IC / Dioda Backlight) pada panel layar putus atau terbakar.",
+      "step_by_step_solution": "1. Lakukan Hard Reset dengan menekan dan menahan tombol Power + Volume Bawah selama 20-30 detik hingga muncul logo.\n2. Sorot layar secara dekat menggunakan lampu senter HP. Jika terlihat bayangan gambar/ikon yang sangat redup di dalam layar, berarti lampu Backlight mati.\n3. Bawa ke teknisi untuk pemasangan ulang soket LCD, perbaikan jalur IC Backlight, atau penggantian panel layar.",
+      "recommendation": "REPLACE", "difficulty": "HARD", "estimated_cost_min": 1200000, "estimated_cost_max": 3500000,
+      "when_to_replace": "Jika hanya soket lepas atau IC Backlight, biayanya masih terjangkau di teknisi. Namun jika harus mengganti panel layar utuh yang harganya melebihi 60% nilai tablet bekasnya, pertimbangkan tukar tambah.",
+      "related_forum_keyword": "tablet blank hitam", "created_at": "2026-10-28T10:26:00Z", "updated_at": "2026-10-28T10:26:00Z"
+    }
+  },
+  {
+    "model": "troubleshooting.troubleshootingarticle", "pk": 28,
+    "fields": {
+      "title": "Tablet Lemot & Patah-Patah Saat Buka PDF Besar / Aplikasi Desain", "slug": "tablet-lemot-pdf", "device_type": "TABLET", "category": "PERFORMANCE",
+      "symptoms": "Saat membuka dokumen PDF ratusan halaman atau kanvas gambar beresolusi tinggi (seperti di GoodNotes/Procreate), pergerakan scroll dan zoom terasa patah-patah (lag).",
+      "causes": "1. Kapasitas RAM tablet kehabisan ruang karena terlalu banyak layer gambar yang belum digabungkan dan aplikasi lain yang berjalan di latar belakang.\n2. Proses sinkronisasi otomatis (Auto-Backup Cloud) sedang berjalan bersamaan saat Anda bekerja.",
+      "step_by_step_solution": "1. Restart tablet secara berkala untuk membersihkan tumpukan memori RAM sementara.\n2. Gabungkan (Merge/Flatten) layer gambar yang sudah selesai pada aplikasi desain untuk meringankan beban render GPU.\n3. Matikan sementara fitur Auto-Sync / Backup Cloud saat sedang mengedit dokumen berukuran besar.",
+      "recommendation": "DIY", "difficulty": "EASY", "estimated_cost_min": 0, "estimated_cost_max": 0,
+      "when_to_replace": "Ini adalah batas wajar manajemen memori perangkat lunak dan bisa diatasi gratis dengan mengoptimalkan cara kerja file, tanpa perlu mengganti tablet.",
+      "related_forum_keyword": "tablet lemot pdf", "created_at": "2026-10-28T10:27:00Z", "updated_at": "2026-10-28T10:27:00Z"
+    }
+  },
+  {
+    "model": "troubleshooting.troubleshootingarticle", "pk": 29,
+    "fields": {
+      "title": "Windows Laptop Sering Freeze / Macet Acak & Blue Screen (BSOD)", "slug": "laptop-freeze-windows", "device_type": "LAPTOP", "category": "PERFORMANCE",
+      "symptoms": "Layar laptop tiba-tiba membeku (freeze) tidak bisa digerakkan kursornya pada waktu acak, atau muncul layar biru (Blue Screen of Death) lalu restart sendiri.",
+      "causes": "1. Kesehatan penyimpanan SSD/HDD menurun (terdapat Bad Sector atau Wear Leveling tinggi).\n2. Konflik driver kartu grafis (GPU) setelah pembaruan Windows.\n3. Pin modul RAM kotor atau salah satu keping RAM mengalami error.",
+      "step_by_step_solution": "1. Matikan paksa dengan menahan tombol Power 10 detik, lalu nyalakan kembali.\n2. Unduh aplikasi gratis 'CrystalDiskInfo' untuk memeriksa persentase Health SSD/HDD. Jika statusnya Caution (Kuning) atau Bad (Merah), segera cadangkan data.\n3. Jalankan 'Windows Memory Diagnostic' untuk mengetes kesehatan RAM.\n4. Jika SSD terbukti rusak, ganti dengan unit SSD baru.",
+      "recommendation": "REPLACE", "difficulty": "MEDIUM", "estimated_cost_min": 400000, "estimated_cost_max": 900000,
+      "when_to_replace": "Anda hanya perlu mengganti komponen SSD atau keping RAM yang rusak, bukan mengganti seluruh unit laptop. Setelah SSD diganti baru, laptop akan kembali stabil sepenuhnya.",
+      "related_forum_keyword": "freeze macet laptop", "created_at": "2026-10-28T10:28:00Z", "updated_at": "2026-10-28T10:28:00Z"
+    }
+  },
+  {
+    "model": "troubleshooting.troubleshootingarticle", "pk": 30,
+    "fields": {
+      "title": "Bodi Laptop Panas & Baterai Boros Meski Sedang Idle (Tidak Dipakai)", "slug": "laptop-panas-idle", "device_type": "LAPTOP", "category": "THERMAL",
+      "symptoms": "Meskipun laptop hanya dibiarkan menyala di meja tanpa membuka aplikasi berat, bodi bawah terasa panas, kipas terus berputar, dan baterai cepat habis.",
+      "causes": "1. Layanan Windows Update atau Windows Search Indexing sedang mengunduh dan memproses file di latar belakang.\n2. Pengaturan Power Plan Windows terkunci di mode 'Best Performance' sehingga frekuensi CPU tidak mau turun (downclock) saat idle.\n3. Adanya program berbahaya (malware/bloatware) yang berjalan sembunyi-sembunyi.",
+      "step_by_step_solution": "1. Buka Task Manager (Ctrl + Shift + Esc), urutkan kolom 'CPU' dari yang tertinggi untuk melihat proses apa yang memakan daya secara diam-diam.\n2. Buka Windows Update, selesaikan pembaruan yang menggantung lalu Restart, atau pilih 'Pause Updates'.\n3. Ubah Power Mode di pengaturan baterai dari 'Best Performance' menjadi 'Balanced'.\n4. Lakukan Full Scan menggunakan Windows Defender.",
+      "recommendation": "DIY", "difficulty": "EASY", "estimated_cost_min": 0, "estimated_cost_max": 0,
+      "when_to_replace": "Masalah ini murni disebabkan oleh aktivitas sistem operasi di latar belakang dan pengaturan daya. Dapat diselesaikan sendiri secara gratis dalam hitungan menit.",
+      "related_forum_keyword": "panas idle laptop", "created_at": "2026-10-28T10:29:00Z", "updated_at": "2026-10-28T10:29:00Z"
+    }
+  }
+]

@@ -30,7 +30,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{% url 'main:show_main' %}#discover" class="nav-link" title="Gadget">
+                        <a href="{% url 'explorer:explorer_search' %}" class="nav-link" title="Gadget">
                             <span class="nav-icon"><img src="/static/img/discover.svg" alt=""></span>
                             <span class="nav-text">Gadget</span>
                         </a>
@@ -48,7 +48,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{% url 'main:show_main' %}#troubleshoot" class="nav-link" title="Troubles">
+                        <a href="{% url 'troubleshooting:article_list' %}" class="nav-link" title="Troubles">
                             <span class="nav-icon"><img src="/static/img/tool.svg" alt=""></span>
                             <span class="nav-text">Troubles</span>
                         </a>
@@ -100,6 +100,6 @@
     </div>
 
     <script src="{% static 'js/sidebar.js' %}"></script>
-    {% block scripts %}{% endblock scripts %}
+    {% include 'components/toast.html' %}
 </body>
 </html>

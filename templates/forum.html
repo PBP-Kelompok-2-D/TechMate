@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
 
-    {% block meta %}
-    <title>Forum - {{ name }}</title>
-    {% endblock meta %}
+{% block meta %}
+<title>Forum - {{ name }}</title>
+{% endblock meta %}
 
 {% block content %}
 <main class="community-page">
@@ -17,7 +17,6 @@
 
             <div class="community-hero-actions">
                 <a href="#diskusi" class="community-button">Jelajahi <span aria-hidden="true">↓</span></a>
-                <a href="{% url 'community:review_list' %}" class="btn btn-outline-info ms-2">⭐ Lihat Review Gadget</a>
 
                 <form method="get" action="{% url 'community:show_forum' %}#diskusi" class="forum-search" role="search">
                     <label for="forum-search-input" class="visually-hidden">Cari diskusi berdasarkan judul</label>
@@ -32,6 +31,7 @@
                 </form>
             </div>
         </div>
+
     </section>
 
     <section class="community-list-section forum-layout" id="diskusi">
@@ -40,18 +40,16 @@
                 <div>
                     {% if title_query %}
                         <h2>Hasil untuk “{{ title_query }}”</h2>
-                        <p><a href="{% url 'community:show_forum' %}#diskusi" class="forum-reset-link">Hapus pencarian</a></p>
+                        <p><a href="{% url 'community:show_forum' %}" class="forum-reset-link">Hapus pencarian</a></p>
                     {% else %}
                         <h2>Obrolan terbaru</h2>
                     {% endif %}
                 </div>
-                <!-- Diubah menjadi blogs|length -->
-                <span class="community-count">{{ blogs|length }} topik</span>
+                <span class="community-count">{{ blog_list|length }} topik</span>
             </div>
 
             <ul class="post-list">
-                <!-- Diubah menjadi blogs agar sesuai dengan views.py -->
-                {% for blog in blogs %}
+                {% for blog in blog_list %}
                     <li>
                         <article class="post-row" id="post-{{ blog.pk }}">
                             <div class="post-meta">
@@ -62,8 +60,7 @@
                             </div>
 
                             <h3 class="post-title">
-                                <!-- Diubah dari blog_detail menjadi forum_detail -->
-                                <a href="{% url 'community:forum_detail' blog.slug %}" class="post-link">{{ blog.title }}</a>
+                                <a href="{% url 'community:blog_detail' blog.slug %}" class="post-link">{{ blog.title }}</a>
                             </h3>
 
                             {% if blog.description %}
@@ -71,16 +68,12 @@
                             {% endif %}
 
                             <div class="post-actions">
-                                <!-- Kita matikan sementara file include upvote bawaan temanmu karena kita sudah pakai AJAX di halaman detail -->
-                                <a href="{% url 'community:forum_detail' blog.slug %}" class="pill-button" style="text-decoration: none;">
-                                    👍 {{ blog.upvoted_by.count }} Upvote
-                                </a>
+                                {% include "components/blog_upvote.html" with blog=blog %}
 
-                                <a href="{% url 'community:forum_detail' blog.slug %}#comments"
+                                <a href="{% url 'community:blog_detail' blog.slug %}#comments"
                                    class="pill-button comment-button"
-                                   aria-label="{{ blog.comments.count }} komentar">
+                                   aria-label="{{ blog.comment_set.count }} komentar">
                                     <img src="/static/img/comment.svg" alt="comment">
-                                    <!-- Diubah menjadi blog.comments.count -->
                                     <span class="pill-count">{{ blog.comments.count }}</span>
                                 </a>
                             </div>
@@ -103,22 +96,8 @@
             </ul>
         </div>
 
-        <!-- TOMBOL BUAT OBROLAN DI BAGIAN OPTION -->
         <aside class="forum-options" aria-labelledby="forum-options-title">
             <h2 id="forum-options-title">Option</h2>
-            
-            <div style="margin-top: 20px;">
-                <a href="{% url 'community:create_thread' %}" 
-                   style="display: block; background-color: #4cc9f0; color: #000; text-align: center; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; width: 100%;">
-                   ➕ Buat Obrolan Baru
-                </a>
-                
-                {% if not user.is_authenticated %}
-                <div style="margin-top: 15px; background-color: rgba(252, 163, 17, 0.1); border: 1px solid #fca311; padding: 12px; border-radius: 8px; text-align: center;">
-                    <small style="color: #fca311;">Harap <a href="/login/" style="color: #fff; font-weight: bold;">login</a> untuk membuat diskusi.</small>
-                </div>
-                {% endif %}
-            </div>
         </aside>
     </section>
 </main>
