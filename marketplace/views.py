@@ -28,7 +28,7 @@ def detail(request, pk):
     item = get_object_or_404(Item, pk=pk)
     related_items = Item.objects.filter(category=item.category, is_sold=False).exclude(pk=pk)[0:3]
 
-    return render(request, 'detail.html', {
+    return render(request, 'detail_item.html', {
         'item' : item,
         'related_item' : related_items,
     })
@@ -96,7 +96,7 @@ def new_conversation(request, item_pk):
     item = get_object_or_404(Item, pk=item_pk)
 
     if item.created_by == request.user:
-        return redirect('templates/index.html')
+        return redirect('index.html')
 
     conversations = Conversation.objects.filter(item=item).filter(members__in=[request.user.id])
 

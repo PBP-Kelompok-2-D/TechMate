@@ -91,6 +91,7 @@ def upvote_thread(request, blog_id):
         # Jika user sudah pernah upvote, maka batalkan (unlike). Jika belum, tambahkan.
         if request.user in blog.upvoted_by.all():
             blog.upvoted_by.remove(request.user)
+            upvoted = False
         else:
             blog.upvoted_by.add(request.user)
             upvoted = True
@@ -125,7 +126,7 @@ def delete_thread(request, slug):
     blog = get_object_or_404(Blog, slug=slug)
     
     # Keamanan: Hanya hapus jika user yang login adalah pembuatnya
-    next_url = request.POST.get("next")
-    if next_url:
-        return redirect(next_url)
-    return redirect("community:show_forum")
+    if request.user == blog.author:
+        blog.delete()
+        
+    return redirect('show_forum')
