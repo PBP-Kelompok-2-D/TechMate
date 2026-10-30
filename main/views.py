@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import login, logout
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.core.exceptions import PermissionDenied  
 
-from main.models import Profile
-from main.forms import ProfileForm
+from main.models import Profile, Report
+from main.forms import ProfileForm, ReportForm
 import datetime
 
 # Create your views here.
@@ -64,10 +66,13 @@ def show_user_profile(request, profile_id):
     profile = get_object_or_404(Profile, pk=profile_id)
     viewed_user = profile.user
     last_login = request.COOKIES.get('last_login', 'No log section yet / Cookie not found')
+    edit_form =  ProfileForm(instance=profile)
     context = {
         'name': NAME,
         "profile": profile,
         "viewed_user": viewed_user,
+        "edit_form": edit_form,
+        "report_form": ReportForm(),
         "last_login": last_login,
     }
     return render(request, "user_profile.html", context)
@@ -93,3 +98,51 @@ def edit_user_profile(request, profile_id):
         "profile": profile,
     }
     return render(request, "profile_update_form.html", context)
+
+@require_POST
+def edit_user_profile_ajax(request, profile_id):
+    profile = get_object_or_404(Profile, pk=profile_id)
+
+    if not request.user.is_superuser and request.user != profile.user:
+        return JsonResponse(
+            {"message": "Anda tidak memiliki izin untuk mengubah profil ini."},
+            status=403,
+        )
+
+    form = ProfileForm(request.POST, instance=profile)
+    if form.is_valid():
+        profile = form.save()
+        return JsonResponse(
+            {
+                "message": "Profil berhasil diperbarui.",
+                "avatar": profile.avatar or "",
+                "bio": profile.bio,
+            },
+            status=200,
+        )
+    return JsonResponse({"errors": form.errors.get_json_data()}, status=400)
+
+@require_POST
+def report_user_ajax(request, profile_id):
+    if not request.user.is_authenticated:
+        return JsonResponse(
+            {"message": "Silakan login untuk melaporkan pengguna."},
+            status=403,
+        )
+
+    profile = get_object_or_404(Profile, pk=profile_id)
+
+    if request.user == profile.user:
+        return JsonResponse(
+            {"message": "Anda tidak dapat melaporkan diri sendiri."},
+            status=403,
+        )
+
+    form = ReportForm(request.POST)
+    if form.is_valid():
+        report = form.save(commit=False)
+        report.reporter = request.user
+        report.reported_user = profile.user
+        report.save()
+        return JsonResponse({"message": "Laporan berhasil dikirim."}, status=201)
+    return JsonResponse({"errors": form.errors.get_json_data()}, status=400)
